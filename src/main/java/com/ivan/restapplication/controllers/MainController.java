@@ -14,7 +14,7 @@ public class MainController {
     public String mainPage(@RequestParam(value = "code",required = false) String code, Model model){
         CODE = code;
         model.addAttribute("token", AuthController.TOKEN);
-        return "indexprototype";
+        return "main";
 
     }
 }

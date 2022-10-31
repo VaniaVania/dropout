@@ -67,6 +67,7 @@ public class AuthController {
         TOKEN = obj.get("access_token").toString()
                    .replace("\"","");
         response.sendRedirect(REDIRECT_URI);
+        System.out.println(TOKEN);
     }
 
     @PostMapping("/playlist")

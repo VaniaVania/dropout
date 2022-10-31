@@ -54,6 +54,19 @@
 			<version>3.0.15.RELEASE</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<version>2.7.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.3.6</version>
+			<scope>runtime</scope>
+		</dependency>
+
 
 
 	</dependencies>
