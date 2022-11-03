@@ -3,10 +3,11 @@ package com.ivan.restapplication.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users_explicit_content")
+@Table(name = "users_explicit_contents")
 public class ExplicitContent {
 
     @Id
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 

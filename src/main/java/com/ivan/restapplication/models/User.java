@@ -1,31 +1,19 @@
 package com.ivan.restapplication.models;
 
-
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
+
     @Id
     @Column(name = "id", nullable = false)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long db_id;
 
-    @Column(name = "href")
-    private String href;
-
-    @ElementCollection
-    @CollectionTable(name = "user_images", joinColumns = @JoinColumn(name = "images"))
-    private List<Object> images;
-
-    @Column(name = "product")
-    private String product;
-
-    @Column(name = "type")
-    private String type;
-
-    @Column(name = "uri")
-    private String uri;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "country")
     private String country;
@@ -36,68 +24,71 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @ElementCollection
-    @CollectionTable(name = "explicit_content", joinColumns = @JoinColumn(name = "user_explicit_content"))
-    private List<Object> explicit_content;
+    @Column(name = "href")
+    private String href;
 
-    @ElementCollection
-    @CollectionTable(name = "external_urls", joinColumns = @JoinColumn(name = "user_external_urls"))
-    private List<Object> external_urls;
+    @Column(name = "spotify_id")
+    private String id;
 
-    @ElementCollection
-    @CollectionTable(name = "followers", joinColumns = @JoinColumn(name = "user_followers"))
-    private List<Object> followers;
+    @Column
+    private String product;
+
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "uri")
+    private String uri;
+
+    @OneToOne
+    @JoinColumn(name = "explicit_contents_id")
+    private ExplicitContent explicit_content;
+
+    @OneToOne
+    @JoinColumn(name = "external_urls_id")
+    private ExternalUrl external_urls;
+
+    @OneToOne
+    @JoinColumn(name = "followers_id")
+    private Follower followers;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<Image> images;
 
 
     public User() {
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getHref() {
-        return href;
-    }
-
-    public void setHref(String href) {
+    public User(String name, String country, String display_name, String email, String href, String id, String product, String type, String uri, ExplicitContent explicit_content, ExternalUrl external_urls, Follower followers, List<Image> images) {
+        this.name = name;
+        this.country = country;
+        this.display_name = display_name;
+        this.email = email;
         this.href = href;
-    }
-
-    public List<Object> getImages() {
-        return images;
-    }
-
-    public void setImages(List<Object> images) {
+        this.id = id;
+        this.product = product;
+        this.type = type;
+        this.uri = uri;
+        this.explicit_content = explicit_content;
+        this.external_urls = external_urls;
+        this.followers = followers;
         this.images = images;
     }
 
-    public String getProduct() {
-        return product;
+    public Long getDb_id() {
+        return db_id;
     }
 
-    public void setProduct(String product) {
-        this.product = product;
+    public void setDb_id(Long id) {
+        this.db_id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getUri() {
-        return uri;
-    }
-
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCountry() {
@@ -124,27 +115,75 @@ public class User {
         this.email = email;
     }
 
-    public List<Object> getExplicit_content() {
+    public String getHref() {
+        return href;
+    }
+
+    public void setHref(String href) {
+        this.href = href;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String spotifyId) {
+        this.id = spotifyId;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public ExplicitContent getExplicit_content() {
         return explicit_content;
     }
 
-    public void setExplicit_content(List<Object> explicit_content) {
-        this.explicit_content = explicit_content;
+    public void setExplicit_content(ExplicitContent explicitContent) {
+        this.explicit_content = explicitContent;
     }
 
-    public List<Object> getExternal_urls() {
+    public ExternalUrl getExternal_urls() {
         return external_urls;
     }
 
-    public void setExternal_urls(List<Object> external_urls) {
+    public void setExternal_urls(ExternalUrl external_urls) {
         this.external_urls = external_urls;
     }
 
-    public List<Object> getFollowers() {
+    public Follower getFollowers() {
         return followers;
     }
 
-    public void setFollowers(List<Object> followers) {
+    public void setFollowers(Follower followers) {
         this.followers = followers;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 }
