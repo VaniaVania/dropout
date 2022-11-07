@@ -1,0 +1,24 @@
+body{
+    font-family: "Bauhaus 93", serif;
+    margin: 0;
+    background: url("/images/leaves.png");
+}
+
+header{
+    font-family: "Bauhaus 93", serif;
+    background-color: yellowgreen ;
+}
+p{
+    font-family: "Verdana", serif;
+}
+
+h3{
+    font-family: "Bauhaus 93", serif;
+    color: #05386B;
+}
+
+a{
+    font-family: "Verdana", serif;
+    color: #05386B;
+    text-align: end;
+}
