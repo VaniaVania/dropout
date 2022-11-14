@@ -5,14 +5,19 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users_followers")
 public class Follower {
+
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String href;
 
     private Integer total;
+
+    @OneToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Follower() {
     }
@@ -44,5 +49,13 @@ public class Follower {
 
     public void setTotal(Integer total) {
         this.total = total;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

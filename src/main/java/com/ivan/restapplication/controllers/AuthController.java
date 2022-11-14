@@ -68,4 +68,13 @@ public class AuthController {
         TOKEN = obj.get("access_token").toString()
                    .replace("\"","");
     }
+
+    @GetMapping("/logout")
+    public RedirectView logout(){
+        String url = "https://accounts.spotify.com/logout";
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getForObject(url,String.class);
+        TOKEN = "";
+        return new RedirectView("http://localhost:8082/main");
+    }
 }

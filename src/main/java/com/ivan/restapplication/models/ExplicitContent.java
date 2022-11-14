@@ -13,6 +13,10 @@ public class ExplicitContent {
 
     private boolean filter_enabled, filter_locked;
 
+    @OneToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public ExplicitContent() {
     }
 
@@ -43,5 +47,13 @@ public class ExplicitContent {
 
     public void setFilter_locked(boolean filter_locked) {
         this.filter_locked = filter_locked;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

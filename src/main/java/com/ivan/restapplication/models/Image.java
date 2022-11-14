@@ -7,13 +7,17 @@ import javax.persistence.*;
 public class Image {
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "images_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String url;
 
     private Integer height, weight;
+
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Image() {
     }
@@ -54,5 +58,13 @@ public class Image {
 
     public void setWeight(Integer weight) {
         this.weight = weight;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

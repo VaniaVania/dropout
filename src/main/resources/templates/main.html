@@ -14,6 +14,17 @@
       <nav class="navbar rounded-3">
         <h3 class="float-md-start mb-0">Cover</h3>
         <a class="nav-link fw-bold" href="/profile">Profile</a>
+
+        <div class="btn-group">
+              <a class="nav-link fw-bold dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Sign in
+              </a>
+                  <ul class="dropdown-menu me-3 py-2" aria-labelledby="dropdownMenuButton">
+                    <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/authorize">Login</a></li>
+                    <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/logout">Logout</a></li>
+                  </ul>
+        </div>
+
       </nav>
 
   </header>
@@ -21,11 +32,6 @@
   <main>
     <h1>My Spotify App</h1>
     <p class="lead">Discover the most popular artist`s songs</p>
-
-    <form th:method="GET" action="/authorize">
-      <button type="submit">Get Rest request</button>
-      </form>
-
   </main>
 
   <footer class="mt-auto text-white-50">

@@ -8,8 +8,8 @@ import java.util.List;
 public class User {
 
     @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    @GeneratedValue
     private Long db_id;
 
     @Column(name = "name")
@@ -39,20 +39,20 @@ public class User {
     @Column(name = "uri")
     private String uri;
 
-    @OneToOne
-    @JoinColumn(name = "explicit_contents_id")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @CollectionTable(name = "users_explicit_contents", joinColumns = @JoinColumn(name = "user_id"))
     private ExplicitContent explicit_content;
 
-    @OneToOne
-    @JoinColumn(name = "external_urls_id")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @CollectionTable(name = "users_external_urls", joinColumns = @JoinColumn(name = "user_id"))
     private ExternalUrl external_urls;
 
-    @OneToOne
-    @JoinColumn(name = "followers_id")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @CollectionTable(name = "users_followers", joinColumns = @JoinColumn(name = "user_id"))
     private Follower followers;
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @CollectionTable(name = "users_images", joinColumns = @JoinColumn(name = "user_id"))
     private List<Image> images;
 
 

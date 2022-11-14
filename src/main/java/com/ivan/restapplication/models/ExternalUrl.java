@@ -14,6 +14,10 @@ public class ExternalUrl {
     @Column(name = "spotify")
     private String spotify;
 
+    @OneToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public ExternalUrl() {
     }
 
@@ -35,5 +39,13 @@ public class ExternalUrl {
 
     public void setSpotify(String spotify) {
         this.spotify = spotify;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
