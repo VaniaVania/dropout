@@ -55,5 +55,8 @@ public class MainController {
         return "profile";
     }
 
-
+    @GetMapping("/artist")
+    public String artist(){
+        return "artist";
+    }
 }
