@@ -24,8 +24,10 @@ public class AuthController {
     private final static String REDIRECT_URI = "http://localhost:8082/callback";
     private final static String RESPONSE_TYPE = "code";
     private final static String GRANT_TYPE = "authorization_code";
+    static String REFRESH_TOKEN = "";
     static String TOKEN = "";
     static String CODE = "";
+
 
     @GetMapping("/authorize")
     public RedirectView authorize(){
@@ -67,6 +69,13 @@ public class AuthController {
         JsonNode obj = mapper.readTree(spotifyResponse);
         TOKEN = obj.get("access_token").toString()
                    .replace("\"","");
+        REFRESH_TOKEN = obj.get("refresh_token").toString()
+                .replace("\"","");
+    }
+
+    @PostMapping("/refresh")
+    public void refreshToken(){
+
     }
 
     @GetMapping("/logout")

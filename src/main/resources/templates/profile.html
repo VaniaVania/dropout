@@ -19,24 +19,27 @@
         <p class="card-text">Information</p>
     </div>
 
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item text-light bg-dark">
-            <p th:text=" 'Name: ' + ${display_name}"></p>
-        </li>
-        <li class="list-group-item text-light bg-dark">
-            <p th:text="'Followers: ' + ${followers}"></p>
-        </li>
-        <li class="list-group-item text-light bg-dark">
-            <p th:text="'Country: ' + ${country}"></p>
-        </li>
-    </ul>
-    <div class="card-body">
-        <a th:href="${external_urls}" class="card-link">Spotify</a>
-    </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item text-light bg-dark">
+                <p th:text=" 'Name: ' + ${display_name}"></p>
+            </li>
+            <li class="list-group-item text-light bg-dark">
+                <p th:text="'Followers: ' + ${followers}"></p>
+            </li>
+            <li class="list-group-item text-light bg-dark">
+                <p th:text="'Country: ' + ${country}"></p>
+            </li>
+        </ul>
+            <div class="card-body">
+                <a th:href="${external_urls}" class="card-link">Spotify</a>
+            </div>
 </div>
 
     </div>
 
+    <script>
+        alert('Hello')
+    </script>
 </main>
 
 

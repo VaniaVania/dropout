@@ -16,7 +16,6 @@ import static com.ivan.restapplication.controllers.AuthController.TOKEN;
 
 @Controller
 public class MainController {
-
     @GetMapping("/main")
     public String mainPage(){
         return "main";
@@ -33,6 +32,8 @@ public class MainController {
         headers.set("Authorization", "Bearer " + TOKEN);
 
         HttpEntity<Object> entity = new HttpEntity<>(headers);
+
+
         String response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class).getBody();
 
         JsonNode object = mapper.readTree(String.valueOf(response));
@@ -49,13 +50,10 @@ public class MainController {
                 .get("spotify")
                 .toString()
                 .replace("\"",""));
+        assert response != null;
 
         return "profile";
     }
 
-    /*@GetMapping
-    public String artist(){
-        String url = "https://api.spotify.com/v1/search";
-    }*/
 
 }

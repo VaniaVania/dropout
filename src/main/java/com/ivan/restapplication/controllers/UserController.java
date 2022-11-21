@@ -1,8 +1,7 @@
 package com.ivan.restapplication.controllers;
 
-import com.ivan.restapplication.models.Follower;
 import com.ivan.restapplication.models.User;
-import com.ivan.restapplication.service.*;
+import com.ivan.restapplication.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
