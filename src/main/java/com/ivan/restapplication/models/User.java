@@ -186,4 +186,24 @@ public class User {
     public void setImages(List<Image> images) {
         this.images = images;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "db_id=" + db_id +
+                ", name='" + name + '\'' +
+                ", country='" + country + '\'' +
+                ", display_name='" + display_name + '\'' +
+                ", email='" + email + '\'' +
+                ", href='" + href + '\'' +
+                ", id='" + id + '\'' +
+                ", product='" + product + '\'' +
+                ", type='" + type + '\'' +
+                ", uri='" + uri + '\'' +
+                ", explicit_content=" + explicit_content +
+                ", external_urls=" + external_urls +
+                ", followers=" + followers +
+                ", images=" + images +
+                '}';
+    }
 }
