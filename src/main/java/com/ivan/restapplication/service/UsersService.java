@@ -2,13 +2,11 @@ package com.ivan.restapplication.service;
 
 
 import com.ivan.restapplication.models.*;
-import com.ivan.restapplication.repository.*;
+import com.ivan.restapplication.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Transient;
 import java.util.List;
 
 @Service

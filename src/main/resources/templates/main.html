@@ -12,22 +12,19 @@
 
   <header class="mb-auto rounded">
 
-      <h3 class="float-md-start mb-0">Cover</h3>
+
       <nav class="navbar rounded-3">
-
-          <a class="nav-link fw-bold" href="/profile">Profile</a>
-          <a class="nav-link fw-bold" href="/artist">Artist</a>
-
+          <h3 class="float-md-start mb-0">Cover</h3>
+          <a class="nav-link ms-auto mb-2 mb-lg-0 fw-bold" href="/artist">Artist</a>
         <div class="btn-group">
-              <a class="nav-link fw-bold dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                Sign in
-              </a>
-                  <ul class="dropdown-menu me-3 py-2" aria-labelledby="dropdownMenuButton">
-                    <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/authorize">Login</a></li>
-                    <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/logout">Logout</a></li>
-                  </ul>
+              <a class="nav-link fw-bold dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" th:if="!${isAuthorized}">Sign in</a>
+              <a class="nav-link fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" href="/profile" th:if="${isAuthorized}">Profile</a>
+            <ul class="dropdown-menu me-3 py-2" aria-labelledby="dropdownMenuButton">
+                <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/authorize" th:if="!${isAuthorized}">Login</a></li>
+                <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/profile" th:if="${isAuthorized}">Profile</a></li>
+                <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/logout" th:if="${isAuthorized}">Logout</a></li>
+            </ul>
         </div>
-
       </nav>
 
   </header>

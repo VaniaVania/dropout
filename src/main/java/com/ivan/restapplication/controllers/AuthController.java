@@ -25,9 +25,8 @@ public class AuthController {
     private final static String RESPONSE_TYPE = "code";
     private final static String GRANT_TYPE = "authorization_code";
     static String REFRESH_TOKEN = "";
-    static String TOKEN = "";
-    static String CODE = "";
-
+    static String TOKEN = null;
+    static String CODE = null;
 
     @GetMapping("/authorize")
     public RedirectView authorize(){
@@ -83,7 +82,7 @@ public class AuthController {
         String url = "https://accounts.spotify.com/logout";
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getForObject(url,String.class);
-        TOKEN = "";
+        TOKEN = null;
         return new RedirectView("http://localhost:8082/main");
     }
 }

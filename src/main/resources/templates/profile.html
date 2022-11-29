@@ -9,39 +9,41 @@
 
 
 <main>
-
     <div class="col-sm-4">
-<div class="card text-white bg-dark mb-3">
-
-    <img class="card-img-top" width="75%" height="75%" th:src="${images}">
-    <div class="card-body">
-        <h5 class="card-title">Profile</h5>
-        <p class="card-text">Information</p>
-    </div>
-
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item text-light bg-dark">
-                <p th:text=" 'Name: ' + ${display_name}"></p>
-            </li>
-            <li class="list-group-item text-light bg-dark">
-                <p th:text="'Followers: ' + ${followers}"></p>
-            </li>
-            <li class="list-group-item text-light bg-dark">
-                <p th:text="'Country: ' + ${country}"></p>
-            </li>
-        </ul>
-            <div class="card-body">
-                <a th:href="${external_urls}" class="card-link">Spotify</a>
+        <div class="card text-dark bg-gradient mb-3">
+            <img class="card-img-top" width="75%" height="75%" th:src="${images}">
+            <div class="card-body border-success">
+                <h5 class="card-title">Profile</h5>
+                <p class="card-text">Information</p>
             </div>
-</div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item text-dark bg-gradient">
+                        <p th:text=" 'Name: ' + ${display_name}"></p>
+                    </li>
+                    <li class="list-group-item text-dark bg-gradient">
+                        <p th:text="'Followers: ' + ${followers}"></p>
+                    </li>
+                    <li class="list-group-item text-dark bg-gradient">
+                        <p th:text="'Country: ' + ${country}"></p>
+                    </li>
+                </ul>
+                    <div class="card-body">
+                        <a th:href="${external_urls}" class="card-link">Spotify</a>
+                    </div>
+        </div>
+
+        <div th:each="image : ${artistImages}" class="card text-dark bg-gradient mb-3">
+            <img  class="card-img-top" width="75%" height="75%" th:src="${image}" alt="Haha">
+            <ul class="list-group list-group-flush">
+                <li th:each="artistName : ${artistsNames}"  class="list-group-item text-dark bg-gradient">
+                    <p th:text=" 'Name: ' + ${artistName}"></p>
+                </li>
+            </ul>
+        </div>
 
     </div>
-
-    <script>
-        alert('Hello')
-    </script>
 </main>
 
-
+<link rel="stylesheet" href="/styles/profile.css">
 </body>
 </html>
