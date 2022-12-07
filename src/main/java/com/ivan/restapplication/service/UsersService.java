@@ -1,12 +1,16 @@
 package com.ivan.restapplication.service;
 
 
+import com.ivan.restapplication.dto.UserDTO;
 import com.ivan.restapplication.models.*;
 import com.ivan.restapplication.repository.UsersRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,7 +25,7 @@ public class UsersService{
     }
 
     @Transactional
-    public void save(User user){
+    public void save(@RequestBody User user){
         Follower follower = user.getFollowers();
         follower.setUser(user);
 
@@ -35,13 +39,13 @@ public class UsersService{
         List<Image> images = user.getImages();
         images.forEach(image -> image.setUser(user));
 
-        usersRepository.save(user);
+        user.setCreatedAt(LocalDateTime.now());
+
+        if(usersRepository.findById(user.getId()).isEmpty()){
+            usersRepository.save(user);
+        }
+
     }
 
-    @Transactional
-    public void ifEmptySave(User user){
-        if(usersRepository.findById(user.getId()).isEmpty()){
-             save(user);
-        }
-    }
+
 }

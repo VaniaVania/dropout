@@ -8,47 +8,136 @@ import com.ivan.restapplication.models.Image;
 import javax.persistence.*;
 import java.util.List;
 
+
 public class UserDTO {
-    @Column(name = "name")
+
     private String name;
 
-    @Column(name = "country")
     private String country;
 
-    @Column(name = "display_name")
     private String display_name;
 
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "href")
     private String href;
 
-    @Column(name = "spotify_id")
     private String id;
 
-    @Column
     private String product;
 
-    @Column(name = "type")
     private String type;
 
-    @Column(name = "uri")
     private String uri;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @CollectionTable(name = "users_explicit_contents", joinColumns = @JoinColumn(name = "user_id"))
     private ExplicitContent explicit_content;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @CollectionTable(name = "users_external_urls", joinColumns = @JoinColumn(name = "user_id"))
     private ExternalUrl external_urls;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @CollectionTable(name = "users_followers", joinColumns = @JoinColumn(name = "user_id"))
     private Follower followers;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @CollectionTable(name = "users_images", joinColumns = @JoinColumn(name = "user_id"))
     private List<Image> images;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getDisplay_name() {
+        return display_name;
+    }
+
+    public void setDisplay_name(String display_name) {
+        this.display_name = display_name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getHref() {
+        return href;
+    }
+
+    public void setHref(String href) {
+        this.href = href;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public ExplicitContent getExplicit_content() {
+        return explicit_content;
+    }
+
+    public void setExplicit_content(ExplicitContent explicit_content) {
+        this.explicit_content = explicit_content;
+    }
+
+    public ExternalUrl getExternal_urls() {
+        return external_urls;
+    }
+
+    public void setExternal_urls(ExternalUrl external_urls) {
+        this.external_urls = external_urls;
+    }
+
+    public Follower getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Follower followers) {
+        this.followers = followers;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
 }

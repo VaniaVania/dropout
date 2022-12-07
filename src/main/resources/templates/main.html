@@ -7,38 +7,13 @@
   <link rel="stylesheet" type="text/css" href="/styles/main.css">
 </head>
 <body class="d-flex h-100 text-center text-bg-dark">
-
-<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column p-3 mb-2 text-dark">
-
-  <header class="mb-auto rounded">
-
-
-      <nav class="navbar rounded-3">
-          <h3 class="float-md-start mb-0">Cover</h3>
-          <a class="nav-link ms-auto mb-2 mb-lg-0 fw-bold" href="/artist">Artist</a>
-        <div class="btn-group">
-              <a class="nav-link fw-bold dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" th:if="!${isAuthorized}">Sign in</a>
-              <a class="nav-link fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" href="/profile" th:if="${isAuthorized}">Profile</a>
-            <ul class="dropdown-menu me-3 py-2" aria-labelledby="dropdownMenuButton">
-                <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/authorize" th:if="!${isAuthorized}">Login</a></li>
-                <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/profile" th:if="${isAuthorized}">Profile</a></li>
-                <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/logout" th:if="${isAuthorized}">Logout</a></li>
-            </ul>
-        </div>
-      </nav>
-
-  </header>
-
-  <main>
-    <h1>My Spotify App</h1>
-    <p class="lead">Discover the most popular artist`s songs</p>
-
-  </main>
-
-  <footer class="mt-auto text-white-50">
-
-  </footer>
-</div>
+  <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column p-3 mb-2 text-dark">
+      <header th:insert="elements/header :: header"></header>
+        <main>
+          <h1>My Spotify App</h1>
+          <p class="lead">Discover the most popular artist`s songs</p>
+        </main>
+      <footer class="mt-auto text-white-50"></footer>
+  </div>
 </body>
-
 </html>

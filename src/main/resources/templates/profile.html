@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-100">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>My Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -7,43 +7,70 @@
 </head>
 <body>
 
-
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column p-3 mb-2 text-dark">
+<header th:insert="elements/header :: header"></header>
 <main>
-    <div class="col-sm-4">
-        <div class="card text-dark bg-gradient mb-3">
-            <img class="card-img-top" width="75%" height="75%" th:src="${images}">
-            <div class="card-body border-success">
-                <h5 class="card-title">Profile</h5>
-                <p class="card-text">Information</p>
+
+
+    <h1 class="text-center">Profile</h1>
+    <div class="row row-cols-2">
+            <div class="card bg-gradient col-2">
+                <img class="card-img-top" width="50%" height="75%" th:src="${images}">
+                    <div class="card-header">
+                        Information
+                         </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item text-dark bg-gradient">
+                                    <p th:text=" 'Name: ' + ${display_name}"></p>
+                                 </li>
+                                <li class="list-group-item text-dark bg-gradient">
+                                    <p th:text="'Followers: ' + ${followers}"></p>
+                                </li>
+                                <li class="list-group-item text-dark bg-gradient">
+                                    <p th:text="'Country: ' + ${country}"></p>
+                                </li>
+                            </ul>
+                        <div class="card-body">
+                    <a th:href="${external_urls}" class="btn btn-success">Spotify</a>
+                </div>
             </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item text-dark bg-gradient">
-                        <p th:text=" 'Name: ' + ${display_name}"></p>
-                    </li>
-                    <li class="list-group-item text-dark bg-gradient">
-                        <p th:text="'Followers: ' + ${followers}"></p>
-                    </li>
-                    <li class="list-group-item text-dark bg-gradient">
-                        <p th:text="'Country: ' + ${country}"></p>
-                    </li>
-                </ul>
-                    <div class="card-body">
-                        <a th:href="${external_urls}" class="card-link">Spotify</a>
+        <div class="accordion col-10" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Top artists
+                    </button>
+                </h2>
+
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div  class="accordion-body">
+
+                        <form action="/profile">
+                                <select th:name="time_range" class="form-select" aria-label="" onchange="this.form.submit()">
+                                    <option selected>Open this select menu</option>
+                                    <option value="short_term">4 weeks</option>
+                                    <option value="medium_term">6 month</option>
+                                    <option value="long_term">1 year</option>
+                                </select>
+                        </form>
+
+                        <div class="row align-items-start mx-2 row-cols-5">
+                            <div th:each="item : ${items}" class="card text-dark bg-gradient">
+                                <img class="card-img-top" width="75%" height="75%" th:src="${item.get('images').get(0).get('url').asText()}" alt="Haha">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item text-dark bg-gradient">
+                                        <p th:text="${item.get('name')}"> </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
+                </div>
+            </div>
         </div>
-
-        <div th:each="image : ${artistImages}" class="card text-dark bg-gradient mb-3">
-            <img  class="card-img-top" width="75%" height="75%" th:src="${image}" alt="Haha">
-            <ul class="list-group list-group-flush">
-                <li th:each="artistName : ${artistsNames}"  class="list-group-item text-dark bg-gradient">
-                    <p th:text=" 'Name: ' + ${artistName}"></p>
-                </li>
-            </ul>
-        </div>
-
     </div>
 </main>
-
+</div>
 <link rel="stylesheet" href="/styles/profile.css">
 </body>
 </html>

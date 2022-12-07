@@ -1,6 +1,7 @@
 package com.ivan.restapplication.models;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -55,6 +56,8 @@ public class User {
     @CollectionTable(name = "users_images", joinColumns = @JoinColumn(name = "user_id"))
     private List<Image> images;
 
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     public User() {
     }
@@ -185,6 +188,14 @@ public class User {
 
     public void setImages(List<Image> images) {
         this.images = images;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
