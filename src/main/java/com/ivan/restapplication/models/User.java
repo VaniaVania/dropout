@@ -40,6 +40,9 @@ public class User {
     @Column(name = "uri")
     private String uri;
 
+    @Column(name = "country_image")
+    private String countryImage;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @CollectionTable(name = "users_explicit_contents", joinColumns = @JoinColumn(name = "user_id"))
     private ExplicitContent explicit_content;
@@ -62,7 +65,7 @@ public class User {
     public User() {
     }
 
-    public User(String name, String country, String display_name, String email, String href, String id, String product, String type, String uri, ExplicitContent explicit_content, ExternalUrl external_urls, Follower followers, List<Image> images) {
+    public User(String name, String country, String display_name, String email, String href, String id, String product, String type, String uri, String countryImage, ExplicitContent explicit_content, ExternalUrl external_urls, Follower followers, List<Image> images, LocalDateTime createdAt) {
         this.name = name;
         this.country = country;
         this.display_name = display_name;
@@ -72,10 +75,12 @@ public class User {
         this.product = product;
         this.type = type;
         this.uri = uri;
+        this.countryImage = countryImage;
         this.explicit_content = explicit_content;
         this.external_urls = external_urls;
         this.followers = followers;
         this.images = images;
+        this.createdAt = createdAt;
     }
 
     public Long getDb_id() {
@@ -196,6 +201,14 @@ public class User {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getCountryImage() {
+        return countryImage;
+    }
+
+    public void setCountryImage(String countryImage) {
+        this.countryImage = countryImage;
     }
 
     @Override

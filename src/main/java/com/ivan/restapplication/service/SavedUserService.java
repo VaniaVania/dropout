@@ -1,10 +1,8 @@
 package com.ivan.restapplication.service;
 
 
-import com.ivan.restapplication.dto.UserDTO;
 import com.ivan.restapplication.models.*;
 import com.ivan.restapplication.repository.UsersRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,12 +13,13 @@ import java.util.List;
 
 @Service
 @Transactional
-public class UsersService{
+public class SavedUserService {
 
     private final UsersRepository usersRepository;
 
+
     @Autowired
-    public UsersService(UsersRepository usersRepository) {
+    public SavedUserService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
@@ -32,7 +31,6 @@ public class UsersService{
         ExplicitContent explicitContent = user.getExplicit_content();
         explicitContent.setUser(user);
 
-
         ExternalUrl externalUrl = user.getExternal_urls();
         externalUrl.setUser(user);
 
@@ -41,11 +39,11 @@ public class UsersService{
 
         user.setCreatedAt(LocalDateTime.now());
 
+        user.setCountryImage("https://countryflagsapi.com/png/" + user.getCountry().toLowerCase());
+
         if(usersRepository.findById(user.getId()).isEmpty()){
             usersRepository.save(user);
         }
 
     }
-
-
 }
