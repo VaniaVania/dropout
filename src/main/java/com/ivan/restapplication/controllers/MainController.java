@@ -1,14 +1,9 @@
 package com.ivan.restapplication.controllers;
 
 import com.ivan.restapplication.service.AuthService;
-import com.ivan.restapplication.util.UnauthorizedUserException;
-import com.ivan.restapplication.util.UnauthorizedUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 

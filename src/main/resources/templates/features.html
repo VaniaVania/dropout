@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Features</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column p-3 mb-2 text-dark">
+    <header th:insert="elements/header :: header"></header>
+<main>
+
+    <form action="/features">
+        <select th:name="feature" class="form-select" aria-label="">
+            <option selected value="acousticness"> acousticness</option>
+            <option value="danceability">danceability</option>
+            <option value="energy">energy</option>
+            <option value="instrumentalness">instrumentalness</option>
+            <option value="liveness">liveness</option>
+            <option value="loudness">loudness</option>
+            <option value="speechiness">speechiness</option>
+            <option value="tempo">tempo</option>
+            <option value="valence">valence</option>
+
+        </select>
+
+        <select th:name="time_range" class="form-select" aria-label="">
+            <option selected value="short_term">4 weeks</option>
+            <option value="medium_term">6 month</option>
+            <option value="long_term">1 year</option>
+        </select>
+
+        <button class="btn-success" type="submit">Calculate</button>
+    </form>
+
+    <div class="row">
+        <div class="card bg-gradient col-2">
+            <img class="card-img-top" width="50%" height="75%" th:src="${happiestTrack.get('album').get('images').get(0).get('url').asText()}">
+            <div class="card-header">
+                <p th:text="'Max level'"></p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item text-dark bg-gradient">
+                    <p th:text="${happiestTrack.get('name').asText()}"></p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card bg-gradient col-2">
+            <img class="card-img-top" width="50%" height="75%" th:src="${saddestTrack.get('album').get('images').get(0).get('url').asText()}">
+            <div class="card-header">
+                <p th:text="'The lowest value'"></p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item text-dark bg-gradient">
+                    <p th:text="${saddestTrack.get('name').asText()}"></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</main>
+</div>
+<script rel="script" src="/js/features.js"></script>
+<script rel="script" src="/js/profile.js"></script>
+<link rel="stylesheet" href="/styles/features.css">
+</body>
+</html>

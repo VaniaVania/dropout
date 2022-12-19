@@ -1,0 +1,17 @@
+
+<nav th:fragment="header" class="navbar rounded-3">
+    <a href="/" class="nav-link fw-bold">Cover</a>
+    <a class="nav-link ms-auto mb-2 mb-lg-0 fw-bold" href="/artist">Artist</a>
+    <a class="nav-link ms-auto mb-2 mb-lg-0 fw-bold" href="/features">Features</a>
+    <div class="btn-group">
+        <a class="nav-link fw-bold dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" th:if="!${isAuthorized}">Sign in</a>
+        <a class="nav-link fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" href="/profile" th:if="${isAuthorized}">Profile</a>
+        <ul class="dropdown-menu me-3 py-2" aria-labelledby="dropdownMenuButton">
+            <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/authorize" th:if="!${isAuthorized}">Login</a></li>
+            <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/profile" th:if="${isAuthorized}">Profile</a></li>
+            <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/logout" th:if="${isAuthorized}">Logout</a></li>
+        </ul>
+    </div>
+    <link rel="stylesheet" href="/styles/header.css">
+</nav>
+
