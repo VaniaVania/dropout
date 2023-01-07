@@ -1,17 +1,39 @@
 
-<nav th:fragment="header" class="navbar rounded-3">
-    <a href="/" class="nav-link fw-bold">Cover</a>
-    <a class="nav-link ms-auto mb-2 mb-lg-0 fw-bold" href="/artist">Artist</a>
-    <a class="nav-link ms-auto mb-2 mb-lg-0 fw-bold" href="/features">Features</a>
-    <div class="btn-group">
-        <a class="nav-link fw-bold dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" th:if="!${isAuthorized}">Sign in</a>
-        <a class="nav-link fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" href="/profile" th:if="${isAuthorized}">Profile</a>
-        <ul class="dropdown-menu me-3 py-2" aria-labelledby="dropdownMenuButton">
-            <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/authorize" th:if="!${isAuthorized}">Login</a></li>
-            <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/profile" th:if="${isAuthorized}">Profile</a></li>
-            <li><a class="nav-link fw-bold dropdown-item" th:method="GET" href="/logout" th:if="${isAuthorized}">Logout</a></li>
-        </ul>
-    </div>
-    <link rel="stylesheet" href="/styles/header.css">
-</nav>
+    <nav th:fragment="header" class="navbar navbar-expand-md fixed-top" id="customHeader">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Dropout</a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto mb-2 mb-md-0">
+
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/features">Features</a>
+                    </li>
+
+                    <li>
+                        <div class="btn-group">
+                            <a class="nav-link fw-bold dropdown-item" th:method="GET" href="/authorize" th:if="!${isAuthorized}">Sign in</a>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="btn-group" th:if="${isAuthorized}">
+                            <img class="img-responsive rounded-circle dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" width="50px" height="50px" th:src="${profileImage}">
+                            <ul class="dropdown-menu dropdown-menu-start dropdown-menu-lg-end" role="menu" aria-labelledby="menu1">
+                                <li role="presentation"><a class="dropdown-item d-flex gap-2 align-items-center" th:method="GET" href="/profile">Profile</a></li>
+                                <li role="presentation"><a class="dropdown-item d-flex gap-2 align-items-center" th:method="GET" href="/logout">Logout</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+        <!--Css links-->
+        <link rel="stylesheet" href="/styles/header.css">
+    </nav>
 

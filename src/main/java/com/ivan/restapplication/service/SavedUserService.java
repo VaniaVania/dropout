@@ -6,7 +6,6 @@ import com.ivan.restapplication.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +23,7 @@ public class SavedUserService {
     }
 
     @Transactional
-    public void save(@RequestBody User user){
+    public void save(User user){
         Follower follower = user.getFollowers();
         follower.setUser(user);
 
@@ -44,6 +43,6 @@ public class SavedUserService {
         if(usersRepository.findById(user.getId()).isEmpty()){
             usersRepository.save(user);
         }
-
     }
+
 }

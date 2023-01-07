@@ -21,12 +21,14 @@ public class AuthController {
     private final AuthService authService;
     private final SavedUserService savedUserService;
     private final RestTemplate restTemplate;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public AuthController(AuthService authService, SavedUserService savedUserService, RestTemplate restTemplate) {
+    public AuthController(AuthService authService, SavedUserService savedUserService, RestTemplate restTemplate, ModelMapper modelMapper) {
         this.authService = authService;
         this.savedUserService = savedUserService;
         this.restTemplate = restTemplate;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/authorize")
@@ -51,7 +53,6 @@ public class AuthController {
     }
 
     public User convertToUser(UserDTO userDTO){
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(userDTO, User.class);
+        return modelMapper.map(userDTO, User.class);
     }
 }

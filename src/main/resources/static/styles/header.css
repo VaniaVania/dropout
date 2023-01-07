@@ -1,19 +1,36 @@
-header{
-    font-family: "Bauhaus 93", serif;
-    background-color: yellowgreen ;
-}
-p{
-    font-family: "Verdana", serif;
+#navbarCollapse{
+    align-items: flex-end;
 }
 
-h3{
-    font-family: "Bauhaus 93", serif;
-    color: #05386B;
+#customHeader{
+    background-color: #D7F213;
+    font-family: 'Barlow', sans-serif;
 }
 
-a{
-    font-family: "Verdana", serif;
-    color: #05386B;
-    text-align: end;
+nav{
+    min-height: 80px;
+    font-size: 1.7rem;
+    color: #D63FFF;
 }
+
+
+.navbar-brand {
+    font-size: 1.9rem;
+    color: #D63FFF;
+}
+
+.nav-link{
+    color: #D63FFF;
+}
+
+.dropdown-menu{
+    background-color: #D7F213;
+    border-radius: 20px ;
+    border: 2px solid #D63FFF;
+}
+
+.dropdown-item{
+    color: #D63FFF;
+}
+
 

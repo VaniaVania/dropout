@@ -1,25 +1,36 @@
-body{
-    font-family: sans-serif;
-    margin: 0;
-    background: url("/images/leaves.png");
+#loginButton{
+    background-color: #D63FFF;
+    color: white;
 }
 
-header{
-    font-family: 'Roboto Mono', monospace;
-    background-color: yellowgreen ;
-}
-p{
-    font-family: 'Roboto Mono', monospace;
+#featureButton{
+    background-color: #D63FFF;
+    color: white;
 }
 
-h3{
-    font-family: 'Roboto Mono', monospace;
-    color: #05386B;
+#categoryButton{
+    background-color: #D63FFF;
+    color: white;
 }
 
 a{
-    font-family: 'Roboto Mono', monospace;
-    color: #05386B;
-    text-align: end;
+    font-family: 'Barlow', sans-serif;
 }
+
+p{
+    font-family: 'Barlow', sans-serif;
+}
+
+body{
+    background-color: ghostwhite;
+}
+
+.btn{
+    background-color: #D63FFF;
+    color: white
+}
+
+
+
+
 

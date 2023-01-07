@@ -12,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/profile")
@@ -58,11 +55,6 @@ public class ProfileController {
                 .get("spotify")
                 .asText());
 
-        //Header Show
-        if(authService.getToken()!=null){
-            model.addAttribute("isAuthorized", true);
-        }
-
         return "profile";
     }
 
@@ -72,6 +64,17 @@ public class ProfileController {
                 System.currentTimeMillis());
 
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED); // Unauthorized - Status 401
+    }
+
+    @ModelAttribute
+    public void addAttributes(Model model) throws JsonProcessingException {
+        if(authService.getToken()!=null){
+            model.addAttribute("isAuthorized", true);
+            model.addAttribute("profileImage", userService.showUserProfile().get("images")
+                    .findValues("url")
+                    .get(0)
+                    .asText());
+        }
     }
 
 }

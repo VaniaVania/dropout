@@ -13,9 +13,6 @@ public class User {
     @GeneratedValue
     private Long db_id;
 
-    @Column(name = "name")
-    private String name;
-
     @Column(name = "country")
     private String country;
 
@@ -65,8 +62,7 @@ public class User {
     public User() {
     }
 
-    public User(String name, String country, String display_name, String email, String href, String id, String product, String type, String uri, String countryImage, ExplicitContent explicit_content, ExternalUrl external_urls, Follower followers, List<Image> images, LocalDateTime createdAt) {
-        this.name = name;
+    public User(String country, String display_name, String email, String href, String id, String product, String type, String uri, String countryImage, ExplicitContent explicit_content, ExternalUrl external_urls, Follower followers, List<Image> images, LocalDateTime createdAt) {
         this.country = country;
         this.display_name = display_name;
         this.email = email;
@@ -89,14 +85,6 @@ public class User {
 
     public void setDb_id(Long id) {
         this.db_id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getCountry() {
@@ -215,7 +203,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "db_id=" + db_id +
-                ", name='" + name + '\'' +
                 ", country='" + country + '\'' +
                 ", display_name='" + display_name + '\'' +
                 ", email='" + email + '\'' +

@@ -2,38 +2,43 @@ package com.ivan.restapplication.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ivan.restapplication.service.AuthService;
-import com.ivan.restapplication.service.SavedUserService;
 import com.ivan.restapplication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping()
-public class MainController {
+@RequestMapping("/manage")
+public class ManageController {
 
-    private final AuthService authService;
     private final UserService userService;
+    private final AuthService authService;
 
     @Autowired
-    public MainController(AuthService authService, UserService userService) {
-        this.authService = authService;
+    public ManageController(UserService userService, AuthService authService) {
         this.userService = userService;
+        this.authService = authService;
     }
 
-    @GetMapping()
-    public String mainPage(){
-        return "main";
+    @GetMapping
+    public String followedArtists(Model model) throws JsonProcessingException {
+       model.addAttribute("artists", userService.getFollowedArtists());
+       model.addAttribute("suggestArtists", userService.suggestArtists());
+       return "manage";
     }
 
-    @GetMapping("/artist")
-    public String artist(){
-        return "artist";
+    @DeleteMapping("/delete")
+    public String unfollowArtist(@RequestParam String ids){
+        userService.unfollowArtist(ids);
+        return "redirect:/manage";
     }
 
+    @PutMapping("/follow")
+    public String followArtist(@RequestParam String ids){
+        userService.followArtist(ids);
+        return "redirect:/manage";
+    }
 
     @ModelAttribute
     public void addAttributes(Model model) throws JsonProcessingException {
