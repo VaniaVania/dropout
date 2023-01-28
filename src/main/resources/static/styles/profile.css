@@ -6,6 +6,10 @@ a{
     color: #D63FFF;
 }
 
+main{
+    font-family: 'Barlow', sans-serif;
+}
+
 #image{
     border-radius: 100px ;
     border: 3px solid #D63FFF;

@@ -1,0 +1,13 @@
+
+br{
+    line-height:100px;
+}
+#root{
+    font-family: 'Barlow', sans-serif;
+}
+
+.btn{
+    background-color: #D63FFF;
+    border-color: white;
+    --bs-btn-active-bg: white;
+}

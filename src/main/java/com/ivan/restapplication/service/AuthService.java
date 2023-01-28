@@ -20,14 +20,13 @@ import javax.transaction.Transactional;
 @Transactional
 public class AuthService {
 
-    private final String client_id = "2c8ed13da29f45b990a1ad43ba870f7d";
-    private final String client_secret = "c18c855bfbe442d6aed8b9df99ae131f";
-    private final String redirect_uri = "http://localhost:8082/callback";
-    private final String response_type = "code";
-    private final String grant_type = "authorization_code";
+    private final String CLIENT_ID = "2c8ed13da29f45b990a1ad43ba870f7d";
+    private final String CLIENT_SECRET = "c18c855bfbe442d6aed8b9df99ae131f";
+    private final String REDIRECT_URI = "http://localhost:8082/callback";
+    private final String RESPONSE_TYPE = "code";
+    private final String GRANT_TYPE = "authorization_code";
     private String token = null;
     private String code = null;
-
     private final RestTemplate restTemplate;
     private final ObjectMapper mapper;
 
@@ -37,11 +36,11 @@ public class AuthService {
         this.mapper = mapper;
     }
 
-    public RedirectView authorize(){
+    public RedirectView authorize() {
         String getUri = "https://accounts.spotify.com/authorize";
-        getUri += "?client_id=" + client_id
-                + "&redirect_uri=" + redirect_uri
-                + "&response_type=" + response_type
+        getUri += "?client_id=" + CLIENT_ID
+                + "&redirect_uri=" + REDIRECT_URI
+                + "&response_type=" + RESPONSE_TYPE
                 + "&show_dialog=" + true
                 + "&scope=" + "playlist-modify-private playlist-modify-public ugc-image-upload user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-follow-modify user-follow-read user-read-playback-position user-top-read user-read-recently-played user-library-modify user-library-read user-read-email user-read-private";
         return new RedirectView(getUri);
@@ -53,15 +52,15 @@ public class AuthService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        MultiValueMap<String,String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type", grant_type);
-        body.add("code" , this.code);
-        body.add("redirect_uri" , redirect_uri);
-        body.add("client_id" , client_id);
-        body.add("client_secret" , client_secret);
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("grant_type", GRANT_TYPE);
+        body.add("code", this.code);
+        body.add("redirect_uri", REDIRECT_URI);
+        body.add("client_id", CLIENT_ID);
+        body.add("client_secret", CLIENT_SECRET);
 
-        HttpEntity<MultiValueMap<String,String>> request = new HttpEntity<>(body, headers);
-        String spotifyResponse = restTemplate.postForObject("https://accounts.spotify.com/api/token",request,String.class);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+        String spotifyResponse = restTemplate.postForObject("https://accounts.spotify.com/api/token", request, String.class);
 
         JsonNode obj = mapper.readTree(spotifyResponse);
         setToken(obj.get("access_token").toString()
@@ -70,37 +69,37 @@ public class AuthService {
     }
 
 
-    public HttpEntity<Object> useToken() throws UnauthorizedUserException{
+    public HttpEntity<Object> useToken() throws UnauthorizedUserException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + getToken());
         return new HttpEntity<>(headers);
     }
 
-    public RedirectView logout(){
+    public RedirectView logout() {
         setToken(null);
-        restTemplate.getForObject("https://accounts.spotify.com/logout",String.class);
+        restTemplate.getForObject("https://accounts.spotify.com/logout", String.class);
         return new RedirectView("http://localhost:8082");
     }
 
-    public String getClient_id() {
-        return client_id;
+    public String getCLIENT_ID() {
+        return CLIENT_ID;
     }
 
-    public String getClient_secret() {
-        return client_secret;
+    public String getCLIENT_SECRET() {
+        return CLIENT_SECRET;
     }
 
-    public String getRedirect_uri() {
-        return redirect_uri;
+    public String getREDIRECT_URI() {
+        return REDIRECT_URI;
     }
 
-    public String getResponse_type() {
-        return response_type;
+    public String getRESPONSE_TYPE() {
+        return RESPONSE_TYPE;
     }
 
-    public String getGrant_type() {
-        return grant_type;
+    public String getGRANT_TYPE() {
+        return GRANT_TYPE;
     }
 
     public String getToken() {

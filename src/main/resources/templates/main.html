@@ -1,13 +1,18 @@
 <html lang="en" prefix="og: http://ogp.me/ns#">
 <head>
-  <title>DropOut</title>
-  <!-- Bootstrap core CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="/styles/main.css">
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600&display=swap" rel="stylesheet">
-  <style> @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@600&display=swap'); </style>
+    <title>DropOut</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/styles/main.css">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600&display=swap" rel="stylesheet">
+    <style> @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@600&display=swap'); </style>
 </head>
 
 <body>
@@ -15,79 +20,93 @@
 
 <main>
 
-  <div id="carouselExampleCaptions" class="carousel slide d-flex" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div>
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="/images/testtrue.jfif" alt="haha" width="100%" height="100%">
-        <div class="carousel-caption d-none d-md-block rounded-2">
-          <h1>Dropout</h1>
-          <p>Explore your unique tastes of music, using our collector algorithms</p>
-          <p><a th:if="!${isAuthorized}" class="btn btn-lg" href="/authorize" role="button" id="loginButton">Login with Spotify</a></p>
+    <div id="carouselExampleCaptions" class="carousel slide d-flex" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
         </div>
-      </div>
-      <div class="carousel-item">
-        <img src="/images/emoji2.png" alt="haha" width="100%" height="100%">
-        <div class="carousel-caption d-none d-md-block rounded-5">
-          <h1 class="text-dark">Features</h1>
-          <p class="text-dark">Find your individual range of emotions</p>
-            <p><a th:if="!${isAuthorized}" class="btn btn-lg" href="/authorize" id="featureButton" role="button">Login with Spotify</a></p>
-            <p><a th:if="${isAuthorized}" class="btn btn-lg" href="/features" role="button">Go to features</a></p>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/images/testtrue.jfif" alt="haha" width="100%" height="100%">
+                <div class="carousel-caption d-none d-md-block rounded-2">
+                    <h1>Dropout</h1>
+                    <p>Explore your unique tastes of music, using our collector algorithms</p>
+                    <p><a th:if="!${isAuthorized}" class="btn btn-lg" href="/authorize" role="button" id="loginButton">Login
+                        with Spotify</a></p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/images/emoji2.png" alt="haha" width="100%" height="100%">
+                <div class="carousel-caption d-none d-md-block rounded-5">
+                    <h1 class="text-dark">Features</h1>
+                    <p class="text-dark">Find your individual range of emotions</p>
+                    <p><a th:if="!${isAuthorized}" class="btn btn-lg" href="/authorize" id="featureButton"
+                          role="button">Login with Spotify</a></p>
+                    <p><a th:if="${isAuthorized}" class="btn btn-lg" href="/features" role="button">Go to features</a>
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/images/manage.jpg" alt="haha" width="100%" height="100%">
+                <div class="carousel-caption d-none d-md-block rounded-2">
+                    <h1>Management</h1>
+                    <p>Try to sort your preferences</p>
+                    <p><a th:if="!${isAuthorized}" class="btn btn-lg" href="/authorize" id="categoryButton"
+                          role="button">Login with Spotify</a></p>
+                    <p><a th:if="${isAuthorized}" class="btn btn-lg" href="/manage" role="button">Manage</a></p>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="carousel-item">
-        <img src="/images/manage.jpg" alt="haha" width="100%" height="100%">
-        <div class="carousel-caption d-none d-md-block rounded-2">
-          <h1>Management</h1>
-          <p>Try to sort your preferences</p>
-            <p><a th:if="!${isAuthorized}" class="btn btn-lg" href="/authorize" id="categoryButton" role="button">Login with Spotify</a></p>
-            <p><a th:if="${isAuthorized}" class="btn btn-lg" href="/manage" role="button">Manage</a></p>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <div class="container marketing">
+        <br>
+        <div class="row">
+            <div class="col-lg-4">
+                <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="/images/trumic.png"
+                     alt="haha">
+
+                <h2>Manage</h2>
+                <p>Your perfect guys</p>
+                <p><a th:if="${isAuthorized}" class="btn btn-secondary" href="/manage" role="button">See more »</a></p>
+                <p><a th:if="!${isAuthorized}" class="btn btn-secondary" href="/authorize" role="button">See more »</a></p>
+            </div>
+            <div class="col-lg-4">
+                <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="/images/piano.png"
+                     alt="haha">
+                <h2>Explore</h2>
+                <p>Unique tracks that always on repeat</p>
+                <p><a th:if="${isAuthorized}" class="btn btn-secondary" href="/features" role="button">See more »</a></p>
+                <p><a th:if="!${isAuthorized}" class="btn btn-secondary" href="/authorize" role="button">See more »</a></p>
+            </div>
+            <div class="col-lg-4">
+                <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="/images/emoji1.png"
+                     alt="haha">
+                <h2>Search</h2>
+                <p>Find out discography of all artists</p>
+                <p><a class="btn btn-secondary" href="/albums" role="button">See more »</a></p>
+            </div>
         </div>
-      </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
 
-  <div class="container marketing">
-    <br>
-    <div class="row">
-      <div class="col-lg-4">
-        <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="/images/trumic.png" alt="haha">
-
-        <h2>Top artists</h2>
-        <p>Your perfect guys</p>
-        <p><a class="btn btn-secondary" href="/manage" role="button">See more »</a></p>
-      </div>
-      <div class="col-lg-4">
-        <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="/images/piano.png" alt="haha">
-        <h2>Top tracks</h2>
-        <p>Always on repeat</p>
-        <p><a class="btn btn-secondary" href="#" role="button">See more »</a></p>
-      </div>
-      <div class="col-lg-4">
-        <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="/images/emoji1.png" alt="haha">
-        <h2>Top Albums</h2>
-        <p>Combination of casual things that work</p>
-        <p><a class="btn btn-secondary" href="/artist" role="button">See more »</a></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="container">
-    <p class="float-right"><a href="#">To the top</a></p>
-  </footer>
+    <!-- FOOTER -->
+    <footer class="container">
+        <p class="float-right"><a href="#">To the top</a></p>
+    </footer>
 </main>
 </body>
 </html>

@@ -8,6 +8,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class TopArtistService {
 
@@ -23,8 +26,20 @@ public class TopArtistService {
     }
 
     public JsonNode findTopArtists(String term) throws JsonProcessingException {
-        String url = "https://api.spotify.com/v1/me/top/artists?limit=50&time_range=";
-        JsonNode currentUserTopArtistJson = mapper.readTree(restTemplate.exchange( url + term, HttpMethod.GET, authService.useToken(), String.class).getBody());
+        JsonNode currentUserTopArtistJson = mapper
+                .readTree(restTemplate
+                        .exchange("https://api.spotify.com/v1/me/top/artists?limit=50&time_range=" + term, HttpMethod.GET, authService.useToken(), String.class)
+                        .getBody());
         return currentUserTopArtistJson.get("items");
+    }
+
+
+    public List<String> getTopArtistsGenres(String term) throws JsonProcessingException {
+        List<String> tracksIds = new ArrayList<>(); // List of tracks ids
+
+        findTopArtists(term).findValue("genres").forEach(el -> tracksIds
+                .add(el.asText()));       // Adding ids to a list
+
+        return tracksIds;
     }
 }

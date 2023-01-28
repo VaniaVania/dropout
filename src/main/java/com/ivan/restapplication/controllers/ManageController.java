@@ -1,7 +1,8 @@
 package com.ivan.restapplication.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ivan.restapplication.service.AuthService;
+import com.ivan.restapplication.service.SubscriptionService;
+import com.ivan.restapplication.service.TopTrackService;
 import com.ivan.restapplication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,41 +14,48 @@ import org.springframework.web.bind.annotation.*;
 public class ManageController {
 
     private final UserService userService;
-    private final AuthService authService;
+    private final SubscriptionService subscriptionService;
+    private final TopTrackService topTrackService;
 
     @Autowired
-    public ManageController(UserService userService, AuthService authService) {
+    public ManageController(UserService userService, SubscriptionService subscriptionService, TopTrackService topTrackService) {
         this.userService = userService;
-        this.authService = authService;
+        this.subscriptionService = subscriptionService;
+        this.topTrackService = topTrackService;
     }
 
     @GetMapping
-    public String followedArtists(Model model) throws JsonProcessingException {
-       model.addAttribute("artists", userService.getFollowedArtists());
-       model.addAttribute("suggestArtists", userService.suggestArtists());
-       return "manage";
+    public String followedArtists(){
+
+        return "manage";
+    }
+
+    @GetMapping("/recommendation")
+    public String recommendedArtists(@RequestParam String seed_artists, @RequestParam String seed_tracks, @RequestParam String seed_genres, Model model) throws JsonProcessingException {
+        model.addAttribute("spotifySuggestedArtists", subscriptionService.getSpotifySuggestedArtists(seed_artists,seed_tracks,seed_genres));
+        return "recommendation";
     }
 
     @DeleteMapping("/delete")
-    public String unfollowArtist(@RequestParam String ids){
-        userService.unfollowArtist(ids);
+    public String unfollowArtists(@RequestParam String ids) {
+        subscriptionService.unfollowArtists(ids);
         return "redirect:/manage";
     }
 
     @PutMapping("/follow")
-    public String followArtist(@RequestParam String ids){
-        userService.followArtist(ids);
+    public String followArtists(@RequestParam String ids) {
+        subscriptionService.followArtists(ids);
         return "redirect:/manage";
     }
 
     @ModelAttribute
-    public void addAttributes(Model model) throws JsonProcessingException {
-        if(authService.getToken()!=null){
-            model.addAttribute("isAuthorized", true);
-            model.addAttribute("profileImage", userService.showUserProfile().get("images")
-                    .findValues("url")
-                    .get(0)
-                    .asText());
-        }
+    public void attributes(Model model) throws JsonProcessingException {
+        model.addAttribute("topTracks", topTrackService.findTopTracks("short_term"));
+        model.addAttribute("followedArtists", userService.getFollowedArtists());
+        model.addAttribute("availableGenres", subscriptionService.getAvailableGenresSeeds());
+
+
+        model.addAttribute("suggestArtists", subscriptionService.getSuggestedArtists());
     }
+
 }

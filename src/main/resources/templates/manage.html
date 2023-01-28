@@ -1,86 +1,221 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Manage</title>
 
-  <!-- Bootstrap core CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="/styles/manage.css">
-  <script rel="script" src="/js/manage.js"></script>
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600&display=swap" rel="stylesheet">
-  <style> @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@600&display=swap'); </style>
+    <!-- Bootstrap core CSS -->
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="/styles/manage.css" rel="stylesheet">
+    <script rel="script" src="/js/manage.js"></script>
+    <script rel="script" src="/js/recommendation.js"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600&display=swap" rel="stylesheet">
+    <style> @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@600&display=swap'); </style>
 </head>
 <body>
 
 <header th:insert="elements/header :: header"></header>
 
 <main>
-  <br>
-  <br>
-  <br>
+    <br>
 
-  <div class="container text-center">
-    <div class="row align-items-start">
-<div class="col">
-    <div class="card w-50 border-info mb-0" th:each="artist : ${artists}">
-      <div class="row g-0">
+    <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button aria-controls="pills-home" aria-selected="true" class="nav-link active" data-bs-target="#pills-home"
+                    data-bs-toggle="pill" id="pills-home-tab" role="tab" type="button">Manage
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button aria-controls="pills-profile" aria-selected="false" class="nav-link" data-bs-target="#pills-profile"
+                    data-bs-toggle="pill" id="pills-profile-tab" role="tab" type="button">Generate
+            </button>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div aria-labelledby="pills-home-tab" class="tab-pane fade show active container text-center" id="pills-home"
+             role="tabpanel">
+            <div class="row row-cols-2">
 
-        <div class="col-sm-2">
-          <img th:src="${artist.get('images').get(1).get('url').asText()}" class="img-fluid rounded-start" alt="...">
-        </div>
+                <div class="flex-column" id="unfollow">
+                    <h1 th:text="Followed">
+                    </h1>
 
-            <div class="col-md-8">
-              <div class="card-body">
-                <h8 class="card-title" th:text="${artist.get('name').asText()}">
-                </h8>
+                    <div class="card mb-2" style="max-height: 100px;" th:each="artist : ${followedArtists}">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <img alt="..."
+                                     class="img-fluid rounded-start" style="max-width: 720px; max-height: 100px;"
+                                     th:src="${artist.get('images').get(1).get('url').asText()}">
+                            </div>
 
-                <input th:name="ids" class="btn-check" th:id="${artist.get('id').asText()}" type="checkbox" th:value="${artist.get('id').asText()}" autocomplete="off">
-                <label class="btn btn-outline-primary end" th:for="${artist.get('id').asText()}">Unfollow</label>
-              </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${artist.get('name').asText()}">
+                                    </h5>
+
+                                    <input autocomplete="off" class="btn-check" th:id="${artist.get('id').asText()}"
+                                           th:name="ids" th:value="${artist.get('id').asText()}" type="checkbox">
+                                    <label class="btn btn-outline-danger end"
+                                           th:for="${artist.get('id').asText()}">Unfollow</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form action="/manage/delete" th:method="DELETE">
+                        <button class="btn btn-danger" id="unfollowSubmitButton" onclick="getFollowedCheckBoxes()"
+                                th:name="ids"
+                                type="submit">Delete
+                        </button>
+                    </form>
+                </div>
+
+                <div class="flex-column" id="follow">
+                    <h1 th:text="Suggested">
+                    </h1>
+                    <div class="card mb-2" style="max-height: 100px;" th:each="suggest : ${suggestArtists}">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <img alt="..."
+                                     class="img-fluid rounded-start" style="max-width: 720px; max-height: 100px;"
+                                     th:src="${suggest.get('images').get(1).get('url').asText()}">
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${suggest.get('name').asText()}">
+                                    </h5>
+
+                                    <input autocomplete="off" class="btn-check" th:id="${suggest.get('id').asText()}"
+                                           th:name="ids" th:value="${suggest.get('id').asText()}" type="checkbox">
+                                    <label class="btn btn-outline-success end"
+                                           th:for="${suggest.get('id').asText()}">Follow</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form action="/manage/follow" th:method="PUT">
+                        <button class="btn btn-success" id="followSubmitButton"
+                                onclick="getUnfollowedCheckBoxesFollow()"
+                                th:name="ids" type="submit">Follow
+                        </button>
+                    </form>
+
+                </div>
             </div>
-      </div>
-    </div>
-
-  <form th:method="DELETE" action="/manage/delete">
-    <button class="btn btn-danger" id="submitButton" onclick="getCheckedCheckBoxes()" th:name="ids" type="submit">Delete</button>
-  </form>
-
-
-</div>
-
-  <div class="col">
-    <div class="card w-50 border-info mb-0" th:each="suggest : ${suggestArtists}">
-      <div class="row g-0">
-
-        <div class="col-sm-2">
-          <img th:src="${suggest.get('images').get(1).get('url').asText()}" class="img-fluid rounded-start" alt="...">
         </div>
+        <div aria-labelledby="pills-profile-tab" class="tab-pane fade container text-center" id="pills-profile"
+             role="tabpanel">
+            <div class="row row-cols-4">
+                <div class="flex-column" id="artists">
+                    <h1 th:text="Artists">
+                    </h1>
 
-        <div class="col-md-8">
-          <div class="card-body">
-            <h8 class="card-title" th:text="${suggest.get('name').asText()}">
-            </h8>
+                    <div class="card mb-3" style="max-height: 100px;" th:each="artist : ${followedArtists}">
+                        <div class="row g-0">
+                            <div class="col-md-3">
+                                <img alt="..."
+                                     class="img-fluid rounded-start" style="max-width: 720px; max-height: 100px;"
+                                     th:src="${artist.get('images').get(1).get('url').asText()}">
+                            </div>
 
-            <input th:name="ids" class="btn-check" th:id="${suggest.get('id').asText()}" type="checkbox" th:value="${suggest.get('id').asText()}" autocomplete="off">
-            <label class="btn btn-outline-primary end" th:for="${suggest.get('id').asText()}">Follow</label>
-          </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title text-end" th:text="${artist.get('name').asText()}">
+                                    </h5>
+
+                                    <input autocomplete="off" class="btn-check"
+                                           th:id="${artist.get('id').asText() + '1'}"
+                                           th:name="seed_artists" th:value="${artist.get('id').asText()}"
+                                           type="checkbox">
+                                    <label class="btn btn-outline-primary end"
+                                           th:for="${artist.get('id').asText() + '1'}">Select</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-column" id="tracks">
+                    <h1 th:text="Tracks">
+                    </h1>
+
+                    <div class="card mb-3" style="max-height: 100px;" th:each="track : ${topTracks}">
+                        <div class="row g-0">
+                            <div class="col-md-3">
+                                <img alt="..."
+                                     class="img-fluid rounded-start" style="max-width: 720px; max-height: 100px;"
+                                     th:src="${track.get('album').get('images').get(1).get('url').asText()}">
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title text-end" th:text="${track.get('name').asText()}">
+                                    </h5>
+
+                                    <input autocomplete="off" class="btn-check" th:id="${track.get('id').asText()}"
+                                           th:name="seed_tracks" th:value="${track.get('id').asText()}" type="checkbox">
+                                    <label class="btn btn-outline-primary end"
+                                           th:for="${track.get('id').asText()}">Select</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-column" id="genres">
+                    <h1 th:text="Genres">
+                    </h1>
+
+                    <div class="card mb-3" style="max-height: 100px;"
+                         th:each="genre : ${availableGenres.get('genres')}">
+                        <div class="row g-0">
+
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title text-end" th:text="${genre.asText()}">
+                                    </h5>
+
+                                    <input autocomplete="off" class="btn-check" th:id="${genre.asText()}"
+                                           th:name="seed_genres" th:value="${genre.asText()}" type="checkbox">
+                                    <label class="btn btn-outline-primary end"
+                                           th:for="${genre.asText()}">Select</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form action="/manage/recommendation">
+                    <input class="btn-danger"
+                           id="artistsChoice"
+                           onclick="getArtistChoice()"
+                           th:name="seed_artists"
+                           type="hidden">
+
+                    <input class="btn-danger"
+                           id="songsChoice"
+                           onclick="getSongsChoice()"
+                           th:name="seed_tracks"
+                           type="hidden">
+
+                    <input class="btn-danger"
+                           id="genresChoice"
+                           onclick="getGenresChoice()"
+                           th:name="seed_genres"
+                           type="hidden">
+
+                    <button class="btn btn-danger" onclick="getChoice()" type="submit">Create</button>
+                </form>
+            </div>
         </div>
-      </div>
     </div>
-
-    <form th:method="PUT" action="/manage/follow">
-      <button class="btn btn-success" id="submitButton2" onclick="getCheckedCheckBoxesFollow()" th:name="ids" type="submit">Follow</button>
-    </form>
-
-  </div>
-    </div>
-  </div>
-
-
-
-
 
 
 </main>

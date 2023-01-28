@@ -5,13 +5,10 @@ import com.ivan.restapplication.models.ExternalUrl;
 import com.ivan.restapplication.models.Follower;
 import com.ivan.restapplication.models.Image;
 
-import javax.persistence.*;
 import java.util.List;
 
 
 public class UserDTO {
-
-    private String name;
 
     private String country;
 
@@ -36,14 +33,6 @@ public class UserDTO {
     private Follower followers;
 
     private List<Image> images;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getCountry() {
         return country;

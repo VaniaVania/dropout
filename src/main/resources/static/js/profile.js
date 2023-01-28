@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var input = document.getElementById('mySelect');
+    let input = document.getElementById('mySelect');
     if (localStorage['mySelect']) { // if job is set
     input.value = localStorage['mySelect']; // set the value
 }
