@@ -3,6 +3,7 @@ package com.ivan.restapplication.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.ivan.restapplication.util.UnauthorizedUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -62,19 +63,21 @@ public class TopTrackService {
                 .collect(Collectors.joining(",", "", ""));
     }
 
-    public JsonNode findTrackFeature(String type, @RequestParam(defaultValue = "valence") String feature, String term) throws JsonProcessingException {
-        if (type.equals("positive")) {
-            return mapper
-                    .readTree(restTemplate
-                            .exchange(getTrackList(term, feature).get(Collections.max(getTrackList(term, feature).keySet())).asText(), HttpMethod.GET, authService.useToken(), String.class)
-                            .getBody());  //Max value from the map
-        } else if (type.equals("negative")) {
-            return mapper
-                    .readTree(restTemplate
-                            .exchange(getTrackList(term, feature).get(Collections.min(getTrackList(term, feature).keySet())).asText(), HttpMethod.GET, authService.useToken(), String.class)
-                            .getBody());  //Min value from the map
-        }
-        return null;
+    public ArrayNode findTrackFeature(@RequestParam String feature, String term) throws JsonProcessingException {
+        ArrayNode node = mapper.createArrayNode();
+        Map<Float, JsonNode> trackList = getTrackList(term, feature);
+
+        node.add(mapper
+                .readTree(restTemplate
+                        .exchange(trackList.get(Collections.max(trackList.keySet())).asText(), HttpMethod.GET, authService.useToken(), String.class)
+                        .getBody()));
+
+        node.add(mapper
+                .readTree(restTemplate
+                        .exchange(trackList.get(Collections.min(trackList.keySet())).asText(), HttpMethod.GET, authService.useToken(), String.class)
+                        .getBody()));
+
+        return node;
     }
 }
 

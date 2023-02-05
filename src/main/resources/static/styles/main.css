@@ -21,9 +21,14 @@ p{
     font-family: 'Barlow', sans-serif;
 }
 
+
 body{
     background-color: ghostwhite;
 
+}
+
+br{
+    line-height: 90px;
 }
 
 .btn{

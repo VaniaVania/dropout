@@ -2,11 +2,15 @@ br{
     line-height:100px;
 }
 
+main{
+    font-family: 'Barlow', sans-serif;
+}
+
 .btn{
     background-color: #D63FFF;
     color: white;
 }
 
-main{
-    font-family: 'Barlow', sans-serif;
+.h1{
+
 }

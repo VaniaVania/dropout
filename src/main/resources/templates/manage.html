@@ -1,5 +1,6 @@
 <html lang="en">
 <head>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <meta charset="UTF-8">
     <title>Manage</title>
 
@@ -38,6 +39,7 @@
         </li>
     </ul>
     <div class="tab-content" id="pills-tabContent">
+
         <div aria-labelledby="pills-home-tab" class="tab-pane fade show active container text-center" id="pills-home"
              role="tabpanel">
             <div class="row row-cols-2">
@@ -46,17 +48,18 @@
                     <h1 th:text="Followed">
                     </h1>
 
-                    <div class="card mb-2" style="max-height: 100px;" th:each="artist : ${followedArtists}">
+                    <div class="card mb-2 shadow-lg p-3 mb-5 bg-body rounded" th:each="artist : ${followedArtists}">
                         <div class="row g-0">
                             <div class="col-md-2">
                                 <img alt="..."
-                                     class="img-fluid rounded-start" style="max-width: 720px; max-height: 100px;"
+                                     class="img-fluid rounded-start"
                                      th:src="${artist.get('images').get(1).get('url').asText()}">
                             </div>
 
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h5 class="card-title" th:text="${artist.get('name').asText()}">
+                                    <h5 class="card-title text-sm-start text-md-end"
+                                        th:text="${artist.get('name').asText()}">
                                     </h5>
 
                                     <input autocomplete="off" class="btn-check" th:id="${artist.get('id').asText()}"
@@ -67,28 +70,24 @@
                             </div>
                         </div>
                     </div>
-                    <form action="/manage/delete" th:method="DELETE">
-                        <button class="btn btn-danger" id="unfollowSubmitButton" onclick="getFollowedCheckBoxes()"
-                                th:name="ids"
-                                type="submit">Delete
-                        </button>
-                    </form>
+                    <br>
                 </div>
 
                 <div class="flex-column" id="follow">
                     <h1 th:text="Suggested">
                     </h1>
-                    <div class="card mb-2" style="max-height: 100px;" th:each="suggest : ${suggestArtists}">
+                    <div class="card mb-2 shadow-lg p-3 mb-5 bg-body rounded" th:each="suggest : ${suggestArtists}">
                         <div class="row g-0">
                             <div class="col-md-2">
                                 <img alt="..."
-                                     class="img-fluid rounded-start" style="max-width: 720px; max-height: 100px;"
+                                     class="img-fluid rounded-start"
                                      th:src="${suggest.get('images').get(1).get('url').asText()}">
                             </div>
 
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h5 class="card-title" th:text="${suggest.get('name').asText()}">
+                                    <h5 class="card-title text-sm-start text-md-end"
+                                        th:text="${suggest.get('name').asText()}">
                                     </h5>
 
                                     <input autocomplete="off" class="btn-check" th:id="${suggest.get('id').asText()}"
@@ -99,121 +98,175 @@
                             </div>
                         </div>
                     </div>
-
-                    <form action="/manage/follow" th:method="PUT">
-                        <button class="btn btn-success" id="followSubmitButton"
-                                onclick="getUnfollowedCheckBoxesFollow()"
-                                th:name="ids" type="submit">Follow
-                        </button>
-                    </form>
-
                 </div>
             </div>
+            <nav class="navbar fixed-bottom navbar-expand-sm bg-light container rounded-top">
+                <a th:text="${error}"></a>
+                <div class="container-fluid justify-content-center">
+                    <button aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"
+                            class="navbar-toggler collapsed" data-bs-target="#navbarCollapse" data-bs-toggle="collapse"
+                            type="button">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse justify-content-sm-center " id="navbarCollapse" style="">
+                        <ul class="navbar-nav row row-cols-sm-2" id="row">
+                            <li class="nav-item flex-column">
+                                <form action="/manage/unfollow" th:method="DELETE">
+                                    <button class="btn btn-danger" id="unfollowSubmitButton"
+                                            onclick="getFollowedCheckBoxes()"
+                                            th:name="ids"
+                                            type="submit">Delete
+                                    </button>
+                                </form>
+                            </li>
+                            <li class="nav-item flex-column">
+                                <form action="/manage/follow" th:method="PUT">
+                                    <button class="btn btn-success" id="followSubmitButton"
+                                            onclick="getUnfollowedCheckBoxesFollow()"
+                                            th:name="ids" type="submit">Follow
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
         </div>
+
         <div aria-labelledby="pills-profile-tab" class="tab-pane fade container text-center" id="pills-profile"
              role="tabpanel">
-            <div class="row row-cols-4">
-                <div class="flex-column" id="artists">
-                    <h1 th:text="Artists">
-                    </h1>
 
-                    <div class="card mb-3" style="max-height: 100px;" th:each="artist : ${followedArtists}">
-                        <div class="row g-0">
-                            <div class="col-md-3">
-                                <img alt="..."
-                                     class="img-fluid rounded-start" style="max-width: 720px; max-height: 100px;"
-                                     th:src="${artist.get('images').get(1).get('url').asText()}">
-                            </div>
-
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title text-end" th:text="${artist.get('name').asText()}">
-                                    </h5>
-
-                                    <input autocomplete="off" class="btn-check"
-                                           th:id="${artist.get('id').asText() + '1'}"
-                                           th:name="seed_artists" th:value="${artist.get('id').asText()}"
-                                           type="checkbox">
-                                    <label class="btn btn-outline-primary end"
-                                           th:for="${artist.get('id').asText() + '1'}">Select</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="card text-bg-white shadow mb-5 p-3">
+                <div class="card-header">Dropout</div>
+                <div class="card-body">
+                    <h5 class="card-title">Reminder</h5>
+                    <p class="card-text">Only up to 5 seed values may be provided in any combination of artists, tracks and genres</p>
                 </div>
-
-                <div class="flex-column" id="tracks">
-                    <h1 th:text="Tracks">
-                    </h1>
-
-                    <div class="card mb-3" style="max-height: 100px;" th:each="track : ${topTracks}">
-                        <div class="row g-0">
-                            <div class="col-md-3">
-                                <img alt="..."
-                                     class="img-fluid rounded-start" style="max-width: 720px; max-height: 100px;"
-                                     th:src="${track.get('album').get('images').get(1).get('url').asText()}">
-                            </div>
-
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title text-end" th:text="${track.get('name').asText()}">
-                                    </h5>
-
-                                    <input autocomplete="off" class="btn-check" th:id="${track.get('id').asText()}"
-                                           th:name="seed_tracks" th:value="${track.get('id').asText()}" type="checkbox">
-                                    <label class="btn btn-outline-primary end"
-                                           th:for="${track.get('id').asText()}">Select</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex-column" id="genres">
-                    <h1 th:text="Genres">
-                    </h1>
-
-                    <div class="card mb-3" style="max-height: 100px;"
-                         th:each="genre : ${availableGenres.get('genres')}">
-                        <div class="row g-0">
-
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title text-end" th:text="${genre.asText()}">
-                                    </h5>
-
-                                    <input autocomplete="off" class="btn-check" th:id="${genre.asText()}"
-                                           th:name="seed_genres" th:value="${genre.asText()}" type="checkbox">
-                                    <label class="btn btn-outline-primary end"
-                                           th:for="${genre.asText()}">Select</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <form action="/manage/recommendation">
-                    <input class="btn-danger"
-                           id="artistsChoice"
-                           onclick="getArtistChoice()"
-                           th:name="seed_artists"
-                           type="hidden">
-
-                    <input class="btn-danger"
-                           id="songsChoice"
-                           onclick="getSongsChoice()"
-                           th:name="seed_tracks"
-                           type="hidden">
-
-                    <input class="btn-danger"
-                           id="genresChoice"
-                           onclick="getGenresChoice()"
-                           th:name="seed_genres"
-                           type="hidden">
-
-                    <button class="btn btn-danger" onclick="getChoice()" type="submit">Create</button>
-                </form>
             </div>
+
+            <div class="shadow mb-5 p-3 bg-body rounded">Artists</div>
+            <div class="row row-cols-3 row-cols-sm-3 row-cols-md-4 row-cols-xl-5 g-3" id="artists">
+                <div class="card mb-5 shadow-lg p-0 mb-5 bg-body rounded" th:each="artist : ${followedArtists}">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img alt="..."
+                                 class="img-fluid"
+                                 th:src="${artist.get('images').get(1).get('url').asText()}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h5 class="card-title text-sm-start text-md-center"
+                                    th:text="${artist.get('name').asText()}">
+                                </h5>
+
+                                <input autocomplete="off" class="btn-check"
+                                       th:id="${artist.get('id').asText() + '1'}"
+                                       th:name="seed_artists" th:value="${artist.get('id').asText()}"
+                                       type="checkbox">
+                                <label class="btn btn-outline-primary end"
+                                       th:for="${artist.get('id').asText() + '1'}">Select</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="shadow mb-5 p-3 bg-body rounded">Tracks</div>
+            <div class="row row-cols-3 row-cols-sm-3 row-cols-md-4 row-cols-xl-5 g-3" id="tracks">
+                <div class="card mb-5 shadow-lg p-0 mb-5 bg-body rounded" th:each="track : ${topTracks}">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img alt="..."
+                                 class="img-fluid"
+                                 th:src="${track.get('album').get('images').get(1).get('url').asText()}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h5 class="card-title text-sm-start text-md-end"
+                                    th:text="${track.get('name').asText()}">
+                                </h5>
+
+                                <input autocomplete="off" class="btn-check" th:id="${track.get('id').asText()}"
+                                       th:name="seed_tracks" th:value="${track.get('id').asText()}" type="checkbox">
+                                <label class="btn btn-outline-primary end"
+                                       th:for="${track.get('id').asText()}">Select</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="shadow mb-5 p-3 bg-body rounded">Genres</div>
+            <div class="row row-cols-3 row-cols-sm-3 row-cols-md-4 row-cols-xl-5 g-3" id="genres">
+                <div class="card mb-5 shadow-lg p-3 mb-5 bg-body rounded"
+                     th:each="genre : ${availableGenres.get('genres')}">
+                    <div class="">
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title text-sm-start text-md-center" th:text="${genre.asText()}">
+                                </h5>
+
+                                <input autocomplete="off" class="btn-check" th:id="${genre.asText()}"
+                                       th:name="seed_genres" th:value="${genre.asText()}" type="checkbox">
+                                <label class="btn btn-outline-primary end"
+                                       th:for="${genre.asText()}">Select</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <nav class="navbar fixed-bottom navbar-expand-sm bg-light container rounded-top" id="generateNav">
+                <div class="container-fluid justify-content-center">
+                    <button aria-controls="navbarCollapse2" aria-expanded="false" aria-label="Toggle navigation"
+                            class="navbar-toggler collapsed" data-bs-target="#navbarCollapse2"
+                            data-bs-toggle="collapse"
+                            type="button">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse justify-content-sm-center " id="navbarCollapse2" style="">
+                        <ul class="navbar-nav row row-cols-sm-0">
+                            <li>
+                                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                    <a class="btn btn-primary" href="#artists">Artists</a>
+                                    <a class="btn btn-primary" href="#tracks">Tracks</a>
+                                    <a class="btn btn-primary" href="#genres">Genres</a>
+                                </div>
+                            </li>
+                            <li>
+                                <form action="/manage/recommendation">
+                                    <input
+                                            id="artistsChoice"
+                                            onclick="getArtistChoice()"
+                                            th:name="seed_artists"
+                                            type="hidden">
+
+                                    <input
+                                            id="songsChoice"
+                                            onclick="getSongsChoice()"
+                                            th:name="seed_tracks"
+                                            type="hidden">
+
+                                    <input
+                                            id="genresChoice"
+                                            onclick="getGenresChoice()"
+                                            th:name="seed_genres"
+                                            type="hidden">
+
+                                    <button class="btn btn-primary" onclick="getChoice()" type="submit">Create</button>
+                                    <a th:text="${generateError}"></a>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
         </div>
     </div>
 

@@ -31,7 +31,13 @@ nav{
 
 .dropdown-item{
     color: #D63FFF;
-    --bs-dropdown-link-active-bg: #D63FFF;
 }
 
+.navbar{
+    --bs-navbar-toggler-border-color: 2;
+}
+
+.navbar-toggler{
+    color: #D63FFF;
+}
 

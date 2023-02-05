@@ -29,7 +29,7 @@ public class ProfileController {
     }
 
     @GetMapping()
-    public String myProfile(@RequestParam(value = "time_range", defaultValue = "short_term") String time_range, Model model) throws JsonProcessingException, UnauthorizedUserException {
+    public String myProfile(@RequestParam(defaultValue = "short_term") String time_range, Model model) throws JsonProcessingException, UnauthorizedUserException {
 
         try {
             //Top track Card
@@ -52,6 +52,7 @@ public class ProfileController {
             model.addAttribute("external_urls", userService.showUserProfile().get("external_urls")
                     .get("spotify")
                     .asText());
+            model.addAttribute("term", time_range);
         } catch (HttpClientErrorException ex){
             throw new UnauthorizedUserException();
         }

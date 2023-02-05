@@ -2,21 +2,21 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>Features</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" rel="stylesheet">
+    <script crossorigin="anonymous"
             integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-            crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/styles/features.css">
-    <link rel="stylesheet" href="/styles/header.css">
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="/styles/features.css" rel="stylesheet">
+    <link href="/styles/header.css" rel="stylesheet">
     <!--CSS AND SCRIPTS-->
     <script rel="script" src="/js/features.js"></script>
-    <script rel="script" src="/js/profile.js"></script>
-    <link rel="stylesheet" href="/styles/features.css">
+    <link href="/styles/features.css" rel="stylesheet">
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600&display=swap" rel="stylesheet">
     <style> @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@600&display=swap'); </style>
 </head>
@@ -29,61 +29,77 @@
     <div class="container marketing">
 
         <div class="d-flex flex-row justify-content-center">
-            <form action="/features">
-                <select th:name="feature" class="form-select" aria-label="">
-                    <option selected value="acousticness">Acousticness</option>
-                    <option value="danceability">Danceability</option>
-                    <option value="energy">Energy</option>
-                    <option value="instrumentalness">Instrumentalness</option>
-                    <option value="liveness">Liveness</option>
-                    <option value="loudness">Loudness</option>
-                    <option value="speechiness">Speechiness</option>
-                    <option value="tempo">Tempo</option>
-                    <option value="valence">Valence</option>
+            <form action="/features" class="shadow-lg rounded">
+                <select aria-label="" class="form-select" id="feature" th:name="feature">
+                    <option th:if="${feature == 'acousticness'}" value="acousticness">Acousticness</option>
+                    <option th:if="${feature == 'danceability'}" value="danceability">Danceability</option>
+                    <option th:if="${feature == 'energy'}" value="energy">Energy</option>
+                    <option th:if="${feature == 'instrumentalness'}" value="instrumentalness">Instrumentalness</option>
+                    <option th:if="${feature == 'liveness'}" value="liveness">Liveness</option>
+                    <option th:if="${feature == 'loudness'}" value="loudness">Loudness</option>
+                    <option th:if="${feature == 'speechiness'}" value="speechiness">Speechiness</option>
+                    <option th:if="${feature == 'tempo'}" value="tempo">Tempo</option>
+                    <option th:if="${feature == 'valence'}" value="valence">Valence</option>
+
+
+                    <option th:if="!${feature == 'acousticness'}" value="acousticness">Acousticness</option>
+                    <option th:if="!${feature == 'danceability'}" value="danceability">Danceability</option>
+                    <option th:if="!${feature == 'energy'}" value="energy">Energy</option>
+                    <option th:if="!${feature == 'instrumentalness'}" value="instrumentalness">Instrumentalness</option>
+                    <option th:if="!${feature == 'liveness'}" value="liveness">Liveness</option>
+                    <option th:if="!${feature == 'loudness'}" value="loudness">Loudness</option>
+                    <option th:if="!${feature == 'speechiness'}" value="speechiness">Speechiness</option>
+                    <option th:if="!${feature == 'tempo'}" value="tempo">Tempo</option>
+                    <option th:if="!${feature == 'valence'}" value="valence">Valence</option>
+
+
                 </select>
+                <select aria-label="" class="form-select mb-3" th:name="time_range">
+                    <option th:if="${term == 'short_term'}" value="short_term">4 weeks</option>
+                    <option th:if="${term == 'medium_term'}" value="medium_term">6 month</option>
+                    <option th:if="${term == 'long_term'}" value="long_term">1 year</option>
 
-                <select th:name="time_range" class="form-select" aria-label="">
-                    <option selected value="short_term">Four weeks</option>
-                    <option value="medium_term">Six month</option>
-                    <option value="long_term">One year</option>
+                    <option th:if="!${term == 'short_term'}" value="short_term">4 weeks</option>
+                    <option th:if="!${term == 'medium_term'}" value="medium_term">6 month</option>
+                    <option th:if="!${term == 'long_term'}" value="long_term">1 year</option>
                 </select>
-
-                <br>
-                <p>
-                    <button class="btn btn-secondary justify-content-center" type="submit">Discover »</button>
-                </p>
-
+                <div class="text-center mb-3">
+                    <button class="btn" type="submit">Discover »</button>
+                </div>
             </form>
         </div>
         <!-- START THE FEATURES -->
-        <hr class="featurette-divider">
 
-        <div class="row featurette">
+        <div class="row feature shadow-lg rounded mb-5">
             <div class="col-md-7">
-                <h2 class="featurette-Заголовок">Meet the .... track.<span class="text-muted">You don`t really part
-                            with it</span></h2>
-                <p th:text="${happiestTrack.get('name').asText()}"></p>
+                <div class="text-center">
+                    <h2 th:text="'This track is about ' + ${feature}"></h2>
+                    <p class="text-muted">You don`t really part with it</p>
+                    <p class="h1" th:text="${track.get(0).get('name').asText()}"></p>
+                </div>
             </div>
             <div class="col-md-5">
-                <img class="card-img-top" width="100%" height="100%"
-                     th:src="${happiestTrack.get('album').get('images').get(0).get('url').asText()}">
+                <img class="card-img-top shadow-lg" height="100%"
+                     th:src="${track.get(0).get('album').get('images').get(0).get('url').asText()}"
+                     width="100%">
             </div>
         </div>
 
-        <hr class="featurette-divider">
-
-        <div class="row featurette">
+        <div class="row feature shadow-lg rounded">
             <div class="col-md-7 order-md-2">
-                <h2 class="featurette-Заголовок">And the ....<span class="text-muted">The opposite side of
-                            feature</span></h2>
-                <p th:text="${saddestTrack.get('name').asText()}"></p>
+                <div class="text-center">
+                    <h2>And, on the contrary</h2>
+                    <p class="text-muted" >The opposite side of feature </p>
+                    <p class="h1" th:text="${track.get(1).get('name').asText()}"></p>
+                </div>
             </div>
             <div class="col-md-5 order-md-1">
-                <img class="card-img-top" width="100%" height="100%"
-                     th:src="${saddestTrack.get('album').get('images').get(0).get('url').asText()}">
+                <img class="card-img-top shadow-lg" height="100%"
+                     th:src="${track.get(1).get('album').get('images').get(0).get('url').asText()}"
+                     width="100%">
             </div>
         </div>
-        <hr class="featurette-divider">
+
     </div>
 </main>
 </body>

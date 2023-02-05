@@ -26,5 +26,51 @@ main{
     border: 2px solid #D63FFF;
 }
 
+.card{
+    --bs-card-border-color: n;
+}
+
+.list-group-item{
+    border: transparent;
+}
+
+.accordion-button:not(.collapsed){
+    color: #D63FFF;
+    background-color: #D7F213;
+}
+
+.accordion-item{
+    color: #D63FFF;
+    --bs-accordion-btn-padding-y: 1rem;
+}
+
+.accordion-button:focus{
+    box-shadow: #D63FFF;
+}
+
+.mb-5{
+    margin-bottom: 0rem!important;
+}
+
+.form-select, select:active, select:hover{
+    border: #D63FFF;
+
+    box-shadow: 0 0 10px 100px #fff inset;
+}
+
+select option:hover,
+select option:focus,
+select option:active {
+    background: linear-gradient(#000000, #000000);
+    background-color: #000000 !important; /* for IE */
+    color: #ffed00 !important;
+}
+
+select option:checked {
+    background: linear-gradient(#d6d6d6, #d6d6d6);
+    background-color: #d6d6d6 !important; /* for IE */
+    color: #000000 !important;
+}
+
 
 
