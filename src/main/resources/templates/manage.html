@@ -52,7 +52,7 @@
                         <div class="row g-0">
                             <div class="col-md-2">
                                 <img alt="..."
-                                     class="img-fluid rounded-start"
+                                     class="img-fluid rounded-5"
                                      th:src="${artist.get('images').get(1).get('url').asText()}">
                             </div>
 
@@ -80,7 +80,7 @@
                         <div class="row g-0">
                             <div class="col-md-2">
                                 <img alt="..."
-                                     class="img-fluid rounded-start"
+                                     class="img-fluid rounded-5"
                                      th:src="${suggest.get('images').get(1).get('url').asText()}">
                             </div>
 
@@ -141,6 +141,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Reminder</h5>
                     <p class="card-text">Only up to 5 seed values may be provided in any combination of artists, tracks and genres</p>
+                    <a th:text="${generateError}"></a>
                 </div>
             </div>
 
@@ -150,7 +151,7 @@
                     <div class="row g-0">
                         <div class="col-md-4">
                             <img alt="..."
-                                 class="img-fluid"
+                                 class="img-fluid rounded-5"
                                  th:src="${artist.get('images').get(1).get('url').asText()}">
                         </div>
 
@@ -179,7 +180,7 @@
                     <div class="row g-0">
                         <div class="col-md-4">
                             <img alt="..."
-                                 class="img-fluid"
+                                 class="img-fluid rounded-5"
                                  th:src="${track.get('album').get('images').get(1).get('url').asText()}">
                         </div>
 
@@ -218,7 +219,7 @@
                         </div>
                     </div>
                 </div>
-
+            <br>
             </div>
 
 
@@ -259,8 +260,8 @@
                                             th:name="seed_genres"
                                             type="hidden">
 
-                                    <button class="btn btn-primary" onclick="getChoice()" type="submit">Create</button>
-                                    <a th:text="${generateError}"></a>
+                                    <button class="btn btn-primary" onclick="getChoice(); myFunction() " type="submit">Create</button>
+                                    <p id="demo"></p>
                                 </form>
                             </li>
                         </ul>

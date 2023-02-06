@@ -31,25 +31,25 @@ public class SubscriptionService {
     }
 
     public JsonNode getSuggestedArtists() throws JsonProcessingException {
+
         ArrayNode suggestNode = mapper.createArrayNode();
-        JsonNode followedNode = userService.getFollowedArtists();
 
-        List<String> terms = new ArrayList<>();
-        terms.add("short_term");
-        terms.add("medium_term");
-        terms.add("long_term");
 
-        for (String term : terms) {
-            for (JsonNode el : topArtistService.findTopArtists(term)) {
+        JsonNode followedNode = userService.getFollowedArtists(); //half-time method
+
+
+        for (JsonNode termNode: topArtistService.findTopArtistsAllTime()) {
+            for (JsonNode el : termNode) {
                 if (!followedNode.findValuesAsText("id").contains(el.get("id").asText()) && !suggestNode.findValuesAsText("id").contains(el.get("id").asText())) {
                     suggestNode.add(el);
                 }
             }
         }
+
         return suggestNode;
     }
 
-    public JsonNode getSpotifySuggestedArtists(String seed_artists,String seed_tracks,String seed_genres) throws JsonProcessingException {
+    public JsonNode getSpotifySuggestedTracks(String seed_artists, String seed_tracks, String seed_genres) throws JsonProcessingException {
         return mapper
                 .readTree(restTemplate
                         .exchange("https://api.spotify.com/v1/recommendations?seed_artists=" + seed_artists + "&seed_genres=" + seed_genres + "&seed_tracks=" + seed_tracks, HttpMethod.GET, authService.useToken(), String.class).getBody());
@@ -62,7 +62,6 @@ public class SubscriptionService {
                 .readTree(restTemplate
                         .exchange("https://api.spotify.com/v1/recommendations/available-genre-seeds", HttpMethod.GET, authService.useToken(), String.class).getBody());
     }
-
 
 
     public void unfollowArtists(String ids) {

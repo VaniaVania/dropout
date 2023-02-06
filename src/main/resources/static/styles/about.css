@@ -1,0 +1,11 @@
+br{
+    line-height:150px;
+}
+
+body{
+    font-family: 'Barlow', sans-serif;
+}
+.btn{
+    background-color: #D63FFF;
+    color: white
+}

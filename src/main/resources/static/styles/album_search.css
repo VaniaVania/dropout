@@ -11,3 +11,12 @@ br{
     border-color: white;
     --bs-btn-active-bg: white;
 }
+
+.card{
+    --bs-card-border-color: transparent;
+    border: transparent;
+}
+
+.card-img{
+
+}

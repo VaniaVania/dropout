@@ -1,0 +1,20 @@
+main{
+    font-family: 'Barlow', sans-serif;
+}
+
+.card{
+--bs-card-border-color: transparent;
+}
+
+.list-group-item{
+    border: transparent;
+}
+
+.btn{
+    background-color: #D63FFF;
+    color: white
+}
+
+br {
+    line-height: 150px;
+}

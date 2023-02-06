@@ -1,0 +1,26 @@
+.btn {
+    font-size: 14px;
+}
+
+.nav-pills{
+    --bs-nav-pills-link-active-bg: #D63FFF;
+}
+
+h5 {
+    font-size: 14px;
+}
+
+br {
+    line-height: 150px;
+}
+
+
+
+main{
+    font-family: 'Barlow', sans-serif;
+}
+
+#row{
+    --bs-gutter-x: 8rem;
+}
+

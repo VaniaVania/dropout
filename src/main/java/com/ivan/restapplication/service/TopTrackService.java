@@ -37,16 +37,17 @@ public class TopTrackService {
 
     public Map<Float, JsonNode> getTrackList(String term, String feature) throws JsonProcessingException {
         Map<Float, JsonNode> tracksListMap = new HashMap<>();  //Map with float value of feature, and track node
-         //Re-arrange list to a string
+        //Re-arrange list to a string
 
         JsonNode featureJson = mapper
                 .readTree(restTemplate
                         .exchange("https://api.spotify.com/v1/audio-features?ids=" + getTopTracksIds(term), HttpMethod.GET, authService.useToken(), String.class)
-                        .getBody());                                                                                                                                    //Request Json for an audio features
+                        .getBody());
+        //Request Json for an audio features
 
-        featureJson.get("audio_features")
-                .forEach(f -> tracksListMap
-                        .put(f.get(feature).floatValue(), f.get("track_href")));     //Forming map
+            featureJson.get("audio_features")
+                    .forEach(f -> tracksListMap
+                            .put(f.get(feature).floatValue(), f.get("track_href")));     //Forming map
 
         return tracksListMap;
     }

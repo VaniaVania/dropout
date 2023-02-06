@@ -58,18 +58,8 @@ main{
     box-shadow: 0 0 10px 100px #fff inset;
 }
 
-select option:hover,
-select option:focus,
-select option:active {
-    background: linear-gradient(#000000, #000000);
-    background-color: #000000 !important; /* for IE */
-    color: #ffed00 !important;
-}
+select option:checked{
 
-select option:checked {
-    background: linear-gradient(#d6d6d6, #d6d6d6);
-    background-color: #d6d6d6 !important; /* for IE */
-    color: #000000 !important;
 }
 
 

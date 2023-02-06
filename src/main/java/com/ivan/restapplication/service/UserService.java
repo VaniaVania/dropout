@@ -40,7 +40,7 @@ public class UserService {
                         .exchange("https://api.spotify.com/v1/me/following?type=artist&limit=50", HttpMethod.GET, authService.useToken(), String.class)
                         .getBody());
 
-        JsonNode items = followedArtistsJson.findValue("items");
+        ArrayNode items = (ArrayNode) followedArtistsJson.findValue("items");
 
         String next = followedArtistsJson.findValue("next").asText();
 
@@ -51,7 +51,7 @@ public class UserService {
                             .getBody());
 
             for (JsonNode e : loopFollowedArtistsJson.findValue("items")) {
-                ((ArrayNode) items).add(e);
+                items.add(e);
             }
             next = loopFollowedArtistsJson.findValue("next").asText();
         }

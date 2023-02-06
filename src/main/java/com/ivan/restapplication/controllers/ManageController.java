@@ -28,7 +28,6 @@ public class ManageController {
     }
 
     @GetMapping
-
     public String followedArtists() {
         return "manage";
     }
@@ -37,9 +36,9 @@ public class ManageController {
     public String recommendedArtists(@RequestParam String seed_artists, @RequestParam String seed_tracks, @RequestParam String seed_genres, Model model, RedirectAttributes redirectAttributes) throws JsonProcessingException {
 
         try {
-            model.addAttribute("spotifySuggestedArtists", subscriptionService.getSpotifySuggestedArtists(seed_artists, seed_tracks, seed_genres));
+            model.addAttribute("spotifySuggestedArtists", subscriptionService.getSpotifySuggestedTracks(seed_artists, seed_tracks, seed_genres));
         } catch (HttpClientErrorException ex) {
-            redirectAttributes.addFlashAttribute("generateError", "Seed must include 5 values in total!");
+            redirectAttributes.addFlashAttribute("generateError", "Choose the right amount of seed");
             return "redirect:/manage#generateNav";
         }
         return "recommendation";
@@ -68,12 +67,11 @@ public class ManageController {
 
     @ModelAttribute
     public void attributes(Model model) throws JsonProcessingException {
+
+        model.addAttribute("followedArtists", userService.getFollowedArtists());  //half-time
+        model.addAttribute("suggestArtists", subscriptionService.getSuggestedArtists()); //half-time
         model.addAttribute("topTracks", topTrackService.findTopTracks("short_term"));
-        model.addAttribute("followedArtists", userService.getFollowedArtists());
         model.addAttribute("availableGenres", subscriptionService.getAvailableGenresSeeds());
-
-
-        model.addAttribute("suggestArtists", subscriptionService.getSuggestedArtists());
     }
 
 }

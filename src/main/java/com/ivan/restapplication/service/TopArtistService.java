@@ -3,6 +3,7 @@ package com.ivan.restapplication.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,19 @@ public class TopArtistService {
         return currentUserTopArtistJson.get("items");
     }
 
+    public JsonNode findTopArtistsAllTime() throws JsonProcessingException {
+        ArrayNode node = mapper.createArrayNode();
+
+        List<String> terms = new ArrayList<>();
+        terms.add("short_term");
+        terms.add("medium_term");
+        terms.add("long_term");
+
+        for (String term : terms) {
+            node.add(findTopArtists(term));
+        }
+        return node;
+    }
 
     public List<String> getTopArtistsGenres(String term) throws JsonProcessingException {
         List<String> tracksIds = new ArrayList<>(); // List of tracks ids

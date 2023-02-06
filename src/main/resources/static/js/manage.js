@@ -1,5 +1,5 @@
 function getFollowedCheckBoxes() {
-    var container = document.querySelector("#unfollow");
+    let container = document.querySelector("#unfollow");
     let selectedCheckBoxes = container.querySelectorAll('input.btn-check:checked');
 
     let checkedValues = Array.from(selectedCheckBoxes).map(cb => cb.value).toLocaleString();
@@ -11,7 +11,7 @@ function getFollowedCheckBoxes() {
 }
 
 function getUnfollowedCheckBoxesFollow() {
-    var container = document.querySelector("#follow");
+    let container = document.querySelector("#follow");
     let selectedCheckBoxes = container.querySelectorAll('input.btn-check:checked');
 
     let checkedValues = Array.from(selectedCheckBoxes).map(cb => cb.value).toLocaleString();
