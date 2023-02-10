@@ -15,14 +15,17 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.transaction.Transactional;
+import java.net.InetAddress;
 
 @Service
 @Transactional
 public class AuthService {
 
+    private final String port = "8085";
+    private final String hostname = "http://" + InetAddress.getLoopbackAddress().getHostName() + ":" + port;
     private final String CLIENT_ID = "2c8ed13da29f45b990a1ad43ba870f7d";
     private final String CLIENT_SECRET = "c18c855bfbe442d6aed8b9df99ae131f";
-    private final String REDIRECT_URI = "http://localhost:8082/callback";
+    private final String REDIRECT_URI = hostname +  "/callback";
     private final String RESPONSE_TYPE = "code";
     private final String GRANT_TYPE = "authorization_code";
     private String token = null;
@@ -79,7 +82,7 @@ public class AuthService {
     public RedirectView logout() {
         setToken(null);
         restTemplate.getForObject("https://accounts.spotify.com/logout", String.class);
-        return new RedirectView("http://localhost:8082");
+        return new RedirectView("/");
     }
 
     public String getCLIENT_ID() {
@@ -116,6 +119,10 @@ public class AuthService {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getPort() {
+        return port;
     }
 }
 

@@ -36,7 +36,7 @@ public class AuthController {
     public RedirectView exchangeCode(@RequestParam(value = "code") String code) throws IOException {
         authService.accessToken(code);
         savedUserService.save(convertToUser(savedUserService.getSpotifyUserDTO()));
-        return new RedirectView("http://localhost:8082");
+        return new RedirectView("/");
     }
 
     @GetMapping("/logout")

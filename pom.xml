@@ -65,11 +65,13 @@
             <version>2.7.5</version>
         </dependency>
 
+
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
+            <version>42.5.3</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.hibernate.validator</groupId>

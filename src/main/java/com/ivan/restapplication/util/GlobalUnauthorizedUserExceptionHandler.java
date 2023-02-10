@@ -18,4 +18,11 @@ public class GlobalUnauthorizedUserExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED); // Unauthorized - Status 401
     }
 
+    @ExceptionHandler
+    private ResponseEntity<NotListeningUserResponse> handleException(NotListeningUserException e) {
+        NotListeningUserResponse response = new NotListeningUserResponse("Please, start to listen music :-)",
+                new Date().getTime());
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
 }

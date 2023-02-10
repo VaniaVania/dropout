@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.ivan.restapplication.util.NotListeningUserException;
 import com.ivan.restapplication.util.UnauthorizedUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -44,11 +45,11 @@ public class TopTrackService {
                         .exchange("https://api.spotify.com/v1/audio-features?ids=" + getTopTracksIds(term), HttpMethod.GET, authService.useToken(), String.class)
                         .getBody());
         //Request Json for an audio features
-
+        if (!featureJson.get("audio_features").toString().equals("[null]")) {
             featureJson.get("audio_features")
                     .forEach(f -> tracksListMap
                             .put(f.get(feature).floatValue(), f.get("track_href")));     //Forming map
-
+        }
         return tracksListMap;
     }
 
@@ -64,7 +65,7 @@ public class TopTrackService {
                 .collect(Collectors.joining(",", "", ""));
     }
 
-    public ArrayNode findTrackFeature(@RequestParam String feature, String term) throws JsonProcessingException {
+    public ArrayNode findTrackFeature(@RequestParam String feature, String term) throws JsonProcessingException, NotListeningUserException {
         ArrayNode node = mapper.createArrayNode();
         Map<Float, JsonNode> trackList = getTrackList(term, feature);
 
