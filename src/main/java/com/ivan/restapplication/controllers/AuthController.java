@@ -1,11 +1,13 @@
 package com.ivan.restapplication.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ivan.restapplication.dto.UserDTO;
 import com.ivan.restapplication.models.User;
 import com.ivan.restapplication.service.AuthService;
 import com.ivan.restapplication.service.SavedUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +30,7 @@ public class AuthController {
     }
 
     @GetMapping("/authorize")
-    public RedirectView authorize() {
+    public RedirectView authorize(){
         return authService.authorize();
     }
 

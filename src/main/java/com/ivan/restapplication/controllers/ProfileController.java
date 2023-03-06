@@ -3,7 +3,7 @@ package com.ivan.restapplication.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ivan.restapplication.service.TopArtistService;
 import com.ivan.restapplication.service.TopTrackService;
-import com.ivan.restapplication.service.UserService;
+import com.ivan.restapplication.service.ProfileService;
 import com.ivan.restapplication.util.UnauthorizedUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,13 +19,13 @@ public class ProfileController {
 
     private final TopTrackService topTrackService;
     private final TopArtistService topArtistService;
-    private final UserService userService;
+    private final ProfileService profileService;
 
     @Autowired
-    public ProfileController(TopTrackService topTrackService, TopArtistService topArtistService, UserService userService) {
+    public ProfileController(TopTrackService topTrackService, TopArtistService topArtistService, ProfileService profileService) {
         this.topTrackService = topTrackService;
         this.topArtistService = topArtistService;
-        this.userService = userService;
+        this.profileService = profileService;
     }
 
     @GetMapping()
@@ -39,17 +39,13 @@ public class ProfileController {
             model.addAttribute("items", topArtistService.findTopArtists(time_range));
 
             //User Card
-            model.addAttribute("images", userService.showUserProfile().get("images")
-                    .findValues("url")
-                    .get(0)
-                    .asText());
-            model.addAttribute("display_name", userService.showUserProfile().get("display_name").asText());
-            model.addAttribute("followers", userService.showUserProfile().get("followers").get("total"));
-            model.addAttribute("country", userService.showUserProfile().get("country").toString()
+            model.addAttribute("display_name", profileService.showUserProfile().get("display_name").asText());
+            model.addAttribute("followers", profileService.showUserProfile().get("followers").get("total"));
+            model.addAttribute("country", profileService.showUserProfile().get("country").toString()
                     .replace("\"", "")
                     .toLowerCase());
 
-            model.addAttribute("external_urls", userService.showUserProfile().get("external_urls")
+            model.addAttribute("external_urls", profileService.showUserProfile().get("external_urls")
                     .get("spotify")
                     .asText());
             model.addAttribute("term", time_range);
