@@ -41,7 +41,7 @@ public class AuthController {
         return new RedirectView("/");
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/mylogout")
     public RedirectView logout() {
         return authService.logout();
     }
