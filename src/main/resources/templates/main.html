@@ -20,8 +20,8 @@
 
 <main>
     <header th:insert="elements/header :: header"></header>
-    <br>
-    <div class="carousel slide" data-bs-ride="carousel" id="carouselExampleCaptions">
+
+    <div class="carousel slide mt-5 py-3" data-bs-ride="carousel" id="carouselExampleCaptions">
         <div class="carousel-indicators">
             <button aria-current="true" aria-label="Slide 1" class="active" data-bs-slide-to="0"
                     data-bs-target="#carouselExampleCaptions" type="button"></button>
@@ -36,9 +36,9 @@
                 <img alt="haha" class="img-fluid" height="100%" src="/images/testtrue.jfif" width="100%">
 
                 <div class="carousel-caption">
-                    <h2>Dropout</h2>
-                    <p>Explore your unique tastes of music, using our collector algorithms</p>
-                    <p><a class="btn btn-secondary mt-auto" href="/authorize" id="loginButton" role="button"
+                    <h3>Dropout</h3>
+                    <p>Explore your tastes of music, using collector algorithms</p>
+                    <p><a class="btn btn-secondary mt-auto btn-sm" href="/authorize" id="loginButton" role="button"
                           th:if="!${isAuthorized}">Login
                         with Spotify</a></p>
                 </div>
@@ -47,22 +47,22 @@
             <div class="carousel-item">
                 <img alt="haha" class="img-fluid" height="100%" src="/images/emoji2.png" width="100%">
                 <div class="carousel-caption">
-                    <h1 class="text-dark">Features</h1>
+                    <h3 class="text-dark">Features</h3>
                     <p class="text-dark">Find your individual range of emotions</p>
-                    <p><a class="btn btn-secondary mt-auto" href="/authorize" id="featureButton" role="button"
-                          th:if="!${isAuthorized}">Login with Spotify</a></p>
-                    <p><a class="btn btn-lg" href="/features" role="button" th:if="${isAuthorized}">Go to features</a>
+                    <a class="btn btn-secondary mt-auto btn-sm" href="/authorize" id="featureButton" role="button"
+                          th:if="!${isAuthorized}">Login with Spotify</a>
+                    <p><a class="btn btn-sm" href="/features" role="button" th:if="${isAuthorized}">Go to features</a>
                     </p>
                 </div>
             </div>
             <div class="carousel-item">
                 <img alt="haha" class="img-fluid" height="100%" src="/images/manage.jpg" width="100%">
                 <div class="carousel-caption">
-                    <h1>Management</h1>
+                    <h3>Management</h3>
                     <p>Try to sort your preferences</p>
-                    <p><a class="btn btn-secondary mt-auto" href="/authorize" id="categoryButton" role="button"
-                          th:if="!${isAuthorized}">Login with Spotify</a></p>
-                    <p><a class="btn btn-lg" href="/manage" role="button" th:if="${isAuthorized}">Manage</a></p>
+                    <a class="btn btn-secondary mt-auto btn-sm" href="/authorize" id="categoryButton" role="button"
+                          th:if="!${isAuthorized}">Login with Spotify</a>
+                    <p><a class="btn btn-sm" href="/manage" role="button" th:if="${isAuthorized}">Manage</a></p>
                 </div>
             </div>
         </div>

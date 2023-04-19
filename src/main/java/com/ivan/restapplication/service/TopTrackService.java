@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.ivan.restapplication.util.NotListeningUserException;
 import com.ivan.restapplication.util.UnauthorizedUserException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +16,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Scope(scopeName = "prototype")
 public class TopTrackService {
 
     private final AuthService authService;
@@ -38,8 +36,20 @@ public class TopTrackService {
                         .getBody()).get("items");
     }
 
+    public String getTopTracksIds(String term) throws JsonProcessingException {
+        List<String> tracksIds = new ArrayList<>(); // List of tracks ids
+
+        findTopTracks(term).forEach(el -> tracksIds
+                .add(el.get("id")
+                        .asText()));       // Adding ids to a list
+
+        return tracksIds.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(",", "", ""));
+    }
+
     public Map<Float, JsonNode> getTrackList(String term, String feature) throws JsonProcessingException {
-        Map<Float, JsonNode> tracksListMap = new HashMap<>();  //Map with float value of feature, and track node
+        Map<Float, JsonNode> tracksListMap = new TreeMap<>();  //Map with float value of feature, and track node
         //Re-arrange list to a string
 
         JsonNode featureJson = mapper
@@ -55,27 +65,14 @@ public class TopTrackService {
         return tracksListMap;
     }
 
-    public String getTopTracksIds(String term) throws JsonProcessingException {
-        List<String> tracksIds = new ArrayList<>(); // List of tracks ids
-
-        findTopTracks(term).forEach(el -> tracksIds
-                .add(el.get("id")
-                        .asText()));       // Adding ids to a list
-
-        return tracksIds.stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining(",", "", ""));
-    }
-
     public ArrayNode findTrackFeature(@RequestParam String feature, String term) throws JsonProcessingException, NotListeningUserException {
         ArrayNode node = mapper.createArrayNode();
-        Map<Float, JsonNode> trackList = getTrackList(term, feature);
+        Map<Float, JsonNode> trackList = new TreeMap<>(getTrackList(term, feature));
 
         node.add(mapper
                 .readTree(restTemplate
                         .exchange(trackList.get(Collections.max(trackList.keySet())).asText(), HttpMethod.GET, authService.useToken(), String.class)
                         .getBody()));
-
         node.add(mapper
                 .readTree(restTemplate
                         .exchange(trackList.get(Collections.min(trackList.keySet())).asText(), HttpMethod.GET, authService.useToken(), String.class)

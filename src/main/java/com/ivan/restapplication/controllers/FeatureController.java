@@ -27,8 +27,8 @@ public class FeatureController {
     public String features(@RequestParam(defaultValue = "short_term") String time_range, @RequestParam(defaultValue = "acousticness") String feature, Model model) throws JsonProcessingException {
         //Track Card
         try {
-            model.addAttribute("track", topTrackService.findTrackFeature(feature, time_range));
 
+            model.addAttribute("track", topTrackService.findTrackFeature(feature, time_range));
             model.addAttribute("feature", feature);
             model.addAttribute("term", time_range);
             return "features";

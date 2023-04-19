@@ -1,9 +1,9 @@
 package com.ivan.restapplication.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ivan.restapplication.service.ProfileService;
 import com.ivan.restapplication.service.TopArtistService;
 import com.ivan.restapplication.service.TopTrackService;
-import com.ivan.restapplication.service.ProfileService;
 import com.ivan.restapplication.util.UnauthorizedUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +31,8 @@ public class ProfileController {
     @GetMapping()
     public String myProfile(@RequestParam(defaultValue = "short_term") String time_range, Model model) throws JsonProcessingException, UnauthorizedUserException {
 
+
+
         try {
             //Top track Card
             model.addAttribute("tracks", topTrackService.findTopTracks(time_range));
@@ -41,9 +43,7 @@ public class ProfileController {
             //User Card
             model.addAttribute("display_name", profileService.showUserProfile().get("display_name").asText());
             model.addAttribute("followers", profileService.showUserProfile().get("followers").get("total"));
-            model.addAttribute("country", profileService.showUserProfile().get("country").toString()
-                    .replace("\"", "")
-                    .toLowerCase());
+            model.addAttribute("country", profileService.showUserProfile().get("country").asText());
 
             model.addAttribute("external_urls", profileService.showUserProfile().get("external_urls")
                     .get("spotify")

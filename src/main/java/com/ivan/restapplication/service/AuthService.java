@@ -15,24 +15,22 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.transaction.Transactional;
 import javax.xml.bind.DatatypeConverter;
-import java.net.InetAddress;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Service
 @SessionScope
-@Transactional
 public class AuthService{
-
     private final String port = "8085";
-    private final String hostname = "http://" + InetAddress.getLoopbackAddress().getHostName() + ":" + port;
+    private final String hostname = "https://spring-jl4mtamkfa-oa.a.run.app";  //https://spring-jl4mtamkfa-oa.a.run.app http://localhost:8085
 
     private final String CLIENT_ID = "2c8ed13da29f45b990a1ad43ba870f7d";
     private final String CLIENT_SECRET = "c18c855bfbe442d6aed8b9df99ae131f";
     private final String REDIRECT_URI = hostname +  "/callback";
     private final String RESPONSE_TYPE = "code";
     private final String GRANT_TYPE = "authorization_code";
+    private final String SCOPE = "playlist-modify-private playlist-modify-public ugc-image-upload user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-follow-modify user-follow-read user-read-playback-position user-top-read user-read-recently-played user-library-modify user-library-read user-read-email user-read-private";
     private String token = null;
     private String refreshToken = null;
     private String code = null;
@@ -40,7 +38,7 @@ public class AuthService{
     private final ObjectMapper mapper;
 
     @Autowired
-    public AuthService(RestTemplate restTemplate, ObjectMapper mapper) {
+    public AuthService(RestTemplate restTemplate, ObjectMapper mapper) throws IOException {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
     }
@@ -51,7 +49,7 @@ public class AuthService{
                 + "&redirect_uri=" + REDIRECT_URI
                 + "&response_type=" + RESPONSE_TYPE
                 + "&show_dialog=" + true
-                + "&scope=" + "playlist-modify-private playlist-modify-public ugc-image-upload user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-follow-modify user-follow-read user-read-playback-position user-top-read user-read-recently-played user-library-modify user-library-read user-read-email user-read-private";
+                + "&scope=" + SCOPE;
         return new RedirectView(getUri);
     }
 
@@ -147,6 +145,10 @@ public class AuthService{
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public String getSCOPE() {
+        return SCOPE;
     }
 }
 

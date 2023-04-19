@@ -37,7 +37,6 @@ public class ManageService {
                         .getBody());
 
         ArrayNode items = (ArrayNode) followedArtistsJson.findValue("items");
-
         String next = followedArtistsJson.get("artists").get("next").asText();
 
         while (!next.equals("null")) {
@@ -65,7 +64,7 @@ public class ManageService {
         ArrayNode suggestNode = mapper.createArrayNode();
         JsonNode followedNode = followedArtistNode; //half-time method
 
-        for (JsonNode termNode: topArtistService.findTopArtistsAllTime()) {
+        for (JsonNode termNode : topArtistService.findTopArtistsAllTime()) {
             for (JsonNode el : termNode) {
                 if (!followedNode.findValuesAsText("id").contains(el.get("id").asText()) && !suggestNode.findValuesAsText("id").contains(el.get("id").asText())) {
                     suggestNode.add(el);
@@ -88,15 +87,11 @@ public class ManageService {
         return mapper
                 .readTree(restTemplate
                         .exchange("https://api.spotify.com/v1/recommendations?seed_artists=" + seed_artists + "&seed_genres=" + seed_genres + "&seed_tracks=" + seed_tracks, HttpMethod.GET, authService.useToken(), String.class).getBody());
-
     }
 
     public JsonNode getAvailableGenresSeeds() throws JsonProcessingException {
-
         return mapper
                 .readTree(restTemplate
                         .exchange("https://api.spotify.com/v1/recommendations/available-genre-seeds", HttpMethod.GET, authService.useToken(), String.class).getBody());
     }
-
-
 }

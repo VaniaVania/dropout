@@ -36,7 +36,7 @@ public class SavedUserService {
 
         ExplicitContent explicitContent = user.getExplicit_content();
         explicitContent.setUser(user);
-        
+
         ExternalUrl externalUrl = user.getExternal_urls();
         externalUrl.setUser(user);
 
@@ -47,7 +47,7 @@ public class SavedUserService {
 
         user.setCountryImage("https://countryflagsapi.com/png/" + user.getCountry().toLowerCase());
 
-        if (usersRepository.findById(user.getId()).isEmpty()) {
+        if(usersRepository.findById(user.getId()).isEmpty()) {
             usersRepository.save(user);
         }
     }

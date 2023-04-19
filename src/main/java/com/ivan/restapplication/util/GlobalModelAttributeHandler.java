@@ -25,31 +25,22 @@ public class GlobalModelAttributeHandler {
     public void addAttributes(Model model) throws JsonProcessingException {
         try {
             authService.useToken();
-        } catch (HttpClientErrorException e){
+        } catch (HttpClientErrorException e){ //TODO
             authService.refreshToken();
             authService.useToken();
         }
 
-        try {
-            if (authService.getToken() != null) {
-                model.addAttribute("isAuthorized", true);
-            }
+        if (authService.getToken() != null) {
+            model.addAttribute("isAuthorized", true);
 
             if (!profileService.showUserProfile().findValues("url").isEmpty()) {
                 model.addAttribute("profileImage", profileService.showUserProfile()
                         .findValues("url")
                         .get(0)
                         .asText());
-
             } else {
                 model.addAttribute("profileImage", "/images/user.png");
             }
-
-        } catch (HttpClientErrorException e) {
-            authService.logout();
         }
-
-
-
     }
 }
