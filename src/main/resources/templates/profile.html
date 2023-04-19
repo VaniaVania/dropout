@@ -34,7 +34,7 @@
                 <h2 th:text=" 'Hello, ' + ${display_name}"></h2>
                 <p th:text="'Followers: ' + ${followers}"></p>
                 <p>Country:
-                    <img crossorigin="anonymous" th:src="'https://countryflagsapi.com/svg/' + ${country}" width="40px" height="30px" alt="flag">
+                    <img th:src="'https://flagsapi.com/' + ${country} + '/flat/64.png'"  width="40px" height="40px" alt="flag">
                 </p>
                 <p><a id="spotify" class="btn" th:href="${external_urls}" role="button">Spotify »</a></p>
             </div>

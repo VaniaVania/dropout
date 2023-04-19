@@ -41,9 +41,7 @@ public class ProfileController {
             //User Card
             model.addAttribute("display_name", profileService.showUserProfile().get("display_name").asText());
             model.addAttribute("followers", profileService.showUserProfile().get("followers").get("total"));
-            model.addAttribute("country", profileService.showUserProfile().get("country").toString()
-                    .replace("\"", "")
-                    .toLowerCase());
+            model.addAttribute("country", profileService.showUserProfile().get("country").asText());
 
             model.addAttribute("external_urls", profileService.showUserProfile().get("external_urls")
                     .get("spotify")
