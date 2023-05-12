@@ -45,7 +45,6 @@ public class ManageService {
                     .readTree(restTemplate
                             .exchange(next, HttpMethod.GET, authService.useToken(), String.class)
                             .getBody());
-
             for (JsonNode e : loopFollowedArtistsJson.findValue("items")) {
                 items.add(e);
             }
@@ -63,11 +62,10 @@ public class ManageService {
 
     public JsonNode getSuggestedArtists() throws JsonProcessingException {
         ArrayNode suggestNode = mapper.createArrayNode();
-        JsonNode followedNode = followedArtistNode; //half-time method
 
         for (JsonNode termNode: topArtistService.findTopArtistsAllTime()) {
             for (JsonNode el : termNode) {
-                if (!followedNode.findValuesAsText("id").contains(el.get("id").asText()) && !suggestNode.findValuesAsText("id").contains(el.get("id").asText())) {
+                if (!followedArtistNode.findValuesAsText("id").contains(el.get("id").asText()) && !suggestNode.findValuesAsText("id").contains(el.get("id").asText())) {
                     suggestNode.add(el);
                 }
             }
@@ -92,7 +90,6 @@ public class ManageService {
     }
 
     public JsonNode getAvailableGenresSeeds() throws JsonProcessingException {
-
         return mapper
                 .readTree(restTemplate
                         .exchange("https://api.spotify.com/v1/recommendations/available-genre-seeds", HttpMethod.GET, authService.useToken(), String.class).getBody());

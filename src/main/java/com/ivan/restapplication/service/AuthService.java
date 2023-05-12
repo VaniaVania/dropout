@@ -9,35 +9,32 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.transaction.Transactional;
 import javax.xml.bind.DatatypeConverter;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 
 @Service
-@SessionScope
 @Transactional
 public class AuthService{
 
-    private final String port = "8085";
-    private final String hostname = "http://" + InetAddress.getLoopbackAddress().getHostName() + ":" + port;
-
+    private final String PORT = "8085";
+    private final String HOSTNAME = "http://" + InetAddress.getLoopbackAddress().getHostName() + ":" + PORT;
     private final String CLIENT_ID = "2c8ed13da29f45b990a1ad43ba870f7d";
     private final String CLIENT_SECRET = "c18c855bfbe442d6aed8b9df99ae131f";
-    private final String REDIRECT_URI = hostname +  "/callback";
+    private final String REDIRECT_URI = HOSTNAME +  "/callback";
     private final String RESPONSE_TYPE = "code";
     private final String GRANT_TYPE = "authorization_code";
-    private String token = null;
-    private String refreshToken = null;
-    private String code = null;
     private final RestTemplate restTemplate;
     private final ObjectMapper mapper;
+    private String token = null;
+    private String refreshToken = null;
 
     @Autowired
     public AuthService(RestTemplate restTemplate, ObjectMapper mapper) {
@@ -56,13 +53,12 @@ public class AuthService{
     }
 
     public void accessToken(String code) throws JsonProcessingException, UnauthorizedUserException {
-            setCode(code);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
             MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
             body.add("grant_type", GRANT_TYPE);
-            body.add("code", this.code);
+            body.add("code", code);
             body.add("redirect_uri", REDIRECT_URI);
             body.add("client_id", CLIENT_ID);
             body.add("client_secret", CLIENT_SECRET);
@@ -129,16 +125,8 @@ public class AuthService{
         this.token = token;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getPort() {
-        return port;
+    public String getPORT() {
+        return PORT;
     }
 
     public String getRefreshToken() {
