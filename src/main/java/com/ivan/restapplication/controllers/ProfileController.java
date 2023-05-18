@@ -32,6 +32,7 @@ public class ProfileController {
     public String myProfile(@RequestParam(defaultValue = "short_term") String time_range, Model model) throws JsonProcessingException, UnauthorizedUserException {
 
         try {
+
             //Top track Card
             model.addAttribute("tracks", topTrackService.findTopTracks(time_range));
 

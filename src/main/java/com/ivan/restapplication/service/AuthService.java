@@ -22,13 +22,14 @@ import java.nio.charset.StandardCharsets;
 
 @Service
 @Transactional
+//@SessionScope
 public class AuthService{
 
     private final String PORT = "8085";
-    private final String HOSTNAME = "http://" + InetAddress.getLoopbackAddress().getHostName() + ":" + PORT;
+    private final String HOSTNAME = "http://localhost:8085";
     private final String CLIENT_ID = "2c8ed13da29f45b990a1ad43ba870f7d";
     private final String CLIENT_SECRET = "c18c855bfbe442d6aed8b9df99ae131f";
-    private final String REDIRECT_URI = HOSTNAME +  "/callback";
+    public final String REDIRECT_URI = HOSTNAME +  "/callback";
     private final String RESPONSE_TYPE = "code";
     private final String GRANT_TYPE = "authorization_code";
     private final RestTemplate restTemplate;

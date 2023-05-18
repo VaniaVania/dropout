@@ -44,6 +44,11 @@ public class AuthController {
         return authService.logout();
     }
 
+    @GetMapping("/oauth2/authorize-client")
+    public RedirectView authorizationSpotify(){
+        return new RedirectView("https://accounts.spotify.com/authorize");
+    }
+
     public User convertToUser(UserDTO userDTO) {
         return modelMapper.map(userDTO, User.class);
     }
