@@ -17,7 +17,7 @@ public class User {
     private String country;
 
     @Column(name = "display_name")
-    private String display_name;
+    private String displayName;
 
     @Column(name = "email")
     private String email;
@@ -62,9 +62,9 @@ public class User {
     public User() {
     }
 
-    public User(String country, String display_name, String email, String href, String id, String product, String type, String uri, String countryImage, ExplicitContent explicit_content, ExternalUrl external_urls, Follower followers, List<Image> images, LocalDateTime createdAt) {
+    public User(String country, String displayName, String email, String href, String id, String product, String type, String uri, String countryImage, ExplicitContent explicit_content, ExternalUrl external_urls, Follower followers, List<Image> images, LocalDateTime createdAt) {
         this.country = country;
-        this.display_name = display_name;
+        this.displayName = displayName;
         this.email = email;
         this.href = href;
         this.id = id;
@@ -95,12 +95,12 @@ public class User {
         this.country = country;
     }
 
-    public String getDisplay_name() {
-        return display_name;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setDisplay_name(String display_name) {
-        this.display_name = display_name;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getEmail() {
@@ -204,7 +204,7 @@ public class User {
         return "User{" +
                 "db_id=" + db_id +
                 ", country='" + country + '\'' +
-                ", display_name='" + display_name + '\'' +
+                ", displayName='" + displayName + '\'' +
                 ", email='" + email + '\'' +
                 ", href='" + href + '\'' +
                 ", id='" + id + '\'' +

@@ -12,7 +12,7 @@ public class UserDTO {
 
     private String country;
 
-    private String display_name;
+    private String displayName;
 
     private String email;
 
@@ -42,12 +42,12 @@ public class UserDTO {
         this.country = country;
     }
 
-    public String getDisplay_name() {
-        return display_name;
+    public String getDisplayName() {
+        return displayName;
     }
 
     public void setDisplay_name(String display_name) {
-        this.display_name = display_name;
+        this.displayName = display_name;
     }
 
     public String getEmail() {

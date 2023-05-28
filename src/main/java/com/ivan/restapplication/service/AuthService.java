@@ -3,11 +3,10 @@ package com.ivan.restapplication.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ivan.restapplication.properties.SpotifyProperties;
 import com.ivan.restapplication.util.UnauthorizedUserException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -17,7 +16,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.transaction.Transactional;
 import javax.xml.bind.DatatypeConverter;
-import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 
 @Service
@@ -25,129 +23,73 @@ import java.nio.charset.StandardCharsets;
 @Transactional
 public class AuthService{
 
-    private final String port = "8085";
-    private final String hostname = "http://" + InetAddress.getLoopbackAddress().getHostName() + ":" + port;
-
-    private final String CLIENT_ID = "2c8ed13da29f45b990a1ad43ba870f7d";
-    private final String CLIENT_SECRET = "c18c855bfbe442d6aed8b9df99ae131f";
-    private final String REDIRECT_URI = hostname +  "/callback";
-    private final String RESPONSE_TYPE = "code";
-    private final String GRANT_TYPE = "authorization_code";
-    private String token = null;
-    private String refreshToken = null;
-    private String code = null;
+    private final SpotifyProperties properties;
     private final RestTemplate restTemplate;
     private final ObjectMapper mapper;
 
     @Autowired
-    public AuthService(RestTemplate restTemplate, ObjectMapper mapper) {
+    public AuthService(RestTemplate restTemplate, ObjectMapper mapper, SpotifyProperties properties) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
+        this.properties = properties;
     }
 
     public RedirectView authorize(){
         String getUri = "https://accounts.spotify.com/authorize";
-        getUri += "?client_id=" + CLIENT_ID
-                + "&redirect_uri=" + REDIRECT_URI
-                + "&response_type=" + RESPONSE_TYPE
-                + "&show_dialog=" + true
+        getUri += "?client_id=" + properties.getClientId()
+                + "&redirect_uri=" + properties.getRedirectUri()
+                + "&response_type=" + properties.getResponseType()
+                + "&show_dialog=" + properties.isShowDialog()
                 + "&scope=" + "playlist-modify-private playlist-modify-public ugc-image-upload user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-follow-modify user-follow-read user-read-playback-position user-top-read user-read-recently-played user-library-modify user-library-read user-read-email user-read-private";
         return new RedirectView(getUri);
     }
 
-    public void accessToken(String code) throws JsonProcessingException, UnauthorizedUserException {
-            setCode(code);
+    public ResponseEntity<Void> accessToken(String code) throws JsonProcessingException, UnauthorizedUserException {
+            properties.setCode(code);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
             MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-            body.add("grant_type", GRANT_TYPE);
-            body.add("code", this.code);
-            body.add("redirect_uri", REDIRECT_URI);
-            body.add("client_id", CLIENT_ID);
-            body.add("client_secret", CLIENT_SECRET);
+            body.add("grant_type", properties.getGrantType());
+            body.add("code", properties.getCode());
+            body.add("redirect_uri", properties.getRedirectUri());
+            body.add("client_id", properties.getClientId());
+            body.add("client_secret", properties.getClientSecret());
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
             JsonNode obj =  mapper.readTree(restTemplate.postForObject("https://accounts.spotify.com/api/token", request, String.class));
 
-            setToken(obj.get("access_token").asText());
-            setRefreshToken(obj.get("refresh_token").asText());
+            properties.setToken(obj.get("access_token").asText());
+            properties.setRefreshToken(obj.get("refresh_token").asText());
+            return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public void refreshToken() throws JsonProcessingException{
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.set("Authorization", "Basic " + DatatypeConverter.printBase64Binary((CLIENT_ID + ":" + CLIENT_SECRET).getBytes(StandardCharsets.UTF_8)));
+        headers.set("Authorization", "Basic " + DatatypeConverter.printBase64Binary((properties.getClientId() + ":" + properties.getClientSecret()).getBytes(StandardCharsets.UTF_8)));
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "refresh_token");
-        body.add("refresh_token", refreshToken);
+        body.add("refresh_token", properties.getRefreshToken());
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
         JsonNode obj =  mapper.readTree(restTemplate.postForObject("https://accounts.spotify.com/api/token", request, String.class));
-        setToken(obj.get("access_token").asText());
+        properties.setToken(obj.get("access_token").asText());
     }
 
     public HttpEntity<Object> useToken() throws UnauthorizedUserException {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("Authorization", "Bearer " + getToken());
+            headers.set("Authorization", "Bearer " + properties.getToken());
             return new HttpEntity<>(headers);
     }
 
-    public RedirectView logout() {
-        setToken(null);
+    public void logout() {
+        properties.setToken(null);
         restTemplate.getForObject("https://accounts.spotify.com/logout", String.class);
-        return new RedirectView("/");
     }
 
-    public String getCLIENT_ID() {
-        return CLIENT_ID;
-    }
-
-    public String getCLIENT_SECRET() {
-        return CLIENT_SECRET;
-    }
-
-    public String getREDIRECT_URI() {
-        return REDIRECT_URI;
-    }
-
-    public String getRESPONSE_TYPE() {
-        return RESPONSE_TYPE;
-    }
-
-    public String getGRANT_TYPE() {
-        return GRANT_TYPE;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getPort() {
-        return port;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
 }
 
 

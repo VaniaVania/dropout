@@ -1,6 +1,7 @@
 package com.ivan.restapplication.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ivan.restapplication.properties.SpotifyProperties;
 import com.ivan.restapplication.service.AuthService;
 import com.ivan.restapplication.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,13 @@ public class GlobalModelAttributeHandler {
 
     private final AuthService authService;
     private final ProfileService profileService;
+    private final SpotifyProperties properties;
 
     @Autowired
-    public GlobalModelAttributeHandler(AuthService authService, ProfileService profileService) {
+    public GlobalModelAttributeHandler(AuthService authService, ProfileService profileService, SpotifyProperties properties) {
         this.authService = authService;
         this.profileService = profileService;
+        this.properties = properties;
     }
 
     @ModelAttribute
@@ -31,7 +34,7 @@ public class GlobalModelAttributeHandler {
         }
 
         try {
-            if (authService.getToken() != null) {
+            if (properties.getToken() != null) {
                 model.addAttribute("isAuthorized", true);
             }
 
