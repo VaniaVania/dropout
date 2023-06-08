@@ -17,7 +17,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Scope(scopeName = "prototype")
 public class TopTrackService {
 
     private final AuthService authService;
@@ -38,36 +37,39 @@ public class TopTrackService {
                         .getBody()).get("items");
     }
 
-    public Map<Float, JsonNode> getTrackList(String term, String feature) throws JsonProcessingException {
-        Map<Float, JsonNode> tracksListMap = new HashMap<>();  //Map with float value of feature, and track node
-        //Re-arrange list to a string
-
-        JsonNode featureJson = mapper
-                .readTree(restTemplate
-                        .exchange("https://api.spotify.com/v1/audio-features?ids=" + getTopTracksIds(term), HttpMethod.GET, authService.useToken(), String.class)
-                        .getBody());
-        //Request Json for an audio features
-        if (!featureJson.get("audio_features").toString().equals("[null]")) {
-            featureJson.get("audio_features")
-                    .forEach(f -> tracksListMap
-                            .put(f.get(feature).floatValue(), f.get("track_href")));     //Forming map
-        }
-        return tracksListMap;
-    }
-
     public String getTopTracksIds(String term) throws JsonProcessingException {
         List<String> tracksIds = new ArrayList<>(); // List of tracks ids
 
         findTopTracks(term).forEach(el -> tracksIds
                 .add(el.get("id")
                         .asText()));       // Adding ids to a list
-
         return tracksIds.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining(",", "", ""));
+
     }
 
-    public ArrayNode findTrackFeature(@RequestParam String feature, String term) throws JsonProcessingException, NotListeningUserException {
+    public Map<Float, JsonNode> getTrackList(String term, String feature) throws JsonProcessingException {
+        Map<Float, JsonNode> tracksListMap = new HashMap<>();  //Map with float value of feature, and track node
+        String ids = getTopTracksIds(term);
+
+        //Re-arrange list to a string
+        JsonNode featureJson = mapper
+                .readTree(restTemplate
+                        .exchange("https://api.spotify.com/v1/audio-features?ids=" + ids, HttpMethod.GET, authService.useToken(), String.class)
+                        .getBody());
+
+        //Request Json for an audio features
+        if (!featureJson.get("audio_features").toString().equals("[null]")) {
+            featureJson.get("audio_features")
+                    .forEach(f -> tracksListMap
+                             .put(f.get(feature).floatValue(), f.get("track_href")));     //Forming map
+        }
+        System.out.println(tracksListMap);
+        return tracksListMap;
+    }
+
+    public ArrayNode findTrackFeature(String feature, String term) throws JsonProcessingException, NotListeningUserException {
         ArrayNode node = mapper.createArrayNode();
         Map<Float, JsonNode> trackList = getTrackList(term, feature);
 

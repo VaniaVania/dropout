@@ -6,20 +6,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivan.restapplication.properties.SpotifyProperties;
 import com.ivan.restapplication.util.UnauthorizedUserException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.annotation.SessionScope;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.transaction.Transactional;
 import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 
 @Service
-@SessionScope
 @Transactional
 public class AuthService{
 
@@ -34,17 +33,18 @@ public class AuthService{
         this.properties = properties;
     }
 
-    public RedirectView authorize(){
+
+    public String authorize(){
         String getUri = "https://accounts.spotify.com/authorize";
         getUri += "?client_id=" + properties.getClientId()
                 + "&redirect_uri=" + properties.getRedirectUri()
                 + "&response_type=" + properties.getResponseType()
                 + "&show_dialog=" + properties.isShowDialog()
-                + "&scope=" + "playlist-modify-private playlist-modify-public ugc-image-upload user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-follow-modify user-follow-read user-read-playback-position user-top-read user-read-recently-played user-library-modify user-library-read user-read-email user-read-private";
-        return new RedirectView(getUri);
+                + "&scope=" + properties.getScope();
+        return getUri;
     }
 
-    public ResponseEntity<Void> accessToken(String code) throws JsonProcessingException, UnauthorizedUserException {
+    public void accessToken(String code) throws JsonProcessingException, UnauthorizedUserException {
             properties.setCode(code);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -57,11 +57,12 @@ public class AuthService{
             body.add("client_secret", properties.getClientSecret());
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
-            JsonNode obj =  mapper.readTree(restTemplate.postForObject("https://accounts.spotify.com/api/token", request, String.class));
+            JsonNode obj =  mapper.readTree(restTemplate.postForObject("https://accounts.spotify.com/api/token",
+                    request,
+                    String.class));
 
             properties.setToken(obj.get("access_token").asText());
             properties.setRefreshToken(obj.get("refresh_token").asText());
-            return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public void refreshToken() throws JsonProcessingException{
@@ -74,7 +75,9 @@ public class AuthService{
         body.add("refresh_token", properties.getRefreshToken());
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
-        JsonNode obj =  mapper.readTree(restTemplate.postForObject("https://accounts.spotify.com/api/token", request, String.class));
+        JsonNode obj = mapper.readTree(restTemplate.postForObject("https://accounts.spotify.com/api/token",
+                request,
+                String.class));
         properties.setToken(obj.get("access_token").asText());
     }
 

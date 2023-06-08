@@ -29,7 +29,8 @@ public class TopArtistService {
     public JsonNode findTopArtists(String term) throws JsonProcessingException {
         JsonNode currentUserTopArtistJson = mapper
                 .readTree(restTemplate
-                        .exchange("https://api.spotify.com/v1/me/top/artists?limit=50&time_range=" + term, HttpMethod.GET, authService.useToken(), String.class)
+                        .exchange("https://api.spotify.com/v1/me/top/artists?limit=50&time_range=" + term, HttpMethod.GET
+                                , authService.useToken(), String.class)
                         .getBody());
         return currentUserTopArtistJson.get("items");
     }

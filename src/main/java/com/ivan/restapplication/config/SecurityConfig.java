@@ -20,8 +20,9 @@ public class SecurityConfig{
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user = User.withUsername("user")
                 .password(passwordEncoder.encode("password"))
-                .roles()
+                .roles("USER")
                 .build();
+
         return new InMemoryUserDetailsManager(user);
     }
 
@@ -48,6 +49,7 @@ public class SecurityConfig{
 
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

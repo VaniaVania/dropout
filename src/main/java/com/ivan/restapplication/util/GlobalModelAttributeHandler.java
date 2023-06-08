@@ -5,10 +5,12 @@ import com.ivan.restapplication.properties.SpotifyProperties;
 import com.ivan.restapplication.service.AuthService;
 import com.ivan.restapplication.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.client.HttpClientErrorException;
+
 
 @ControllerAdvice
 public class GlobalModelAttributeHandler {
@@ -51,8 +53,6 @@ public class GlobalModelAttributeHandler {
         } catch (HttpClientErrorException e) {
             authService.logout();
         }
-
-
 
     }
 }

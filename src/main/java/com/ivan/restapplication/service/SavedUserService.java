@@ -29,7 +29,11 @@ public class SavedUserService {
     }
 
     @Transactional
-    public void save(User user) {
+    public boolean save(User user) {
+
+        if (usersRepository.findById(user.getId()).isPresent()) {
+            return false;
+        }
 
         Follower follower = user.getFollowers();
         follower.setUser(user);
@@ -47,9 +51,8 @@ public class SavedUserService {
 
         user.setCountryImage("https://countryflagsapi.com/png/" + user.getCountry().toLowerCase());
 
-        if (usersRepository.findById(user.getId()).isEmpty()) {
-            usersRepository.save(user);
-        }
+        usersRepository.save(user);
+        return true;
     }
 
     public UserDTO getSpotifyUserDTO() {

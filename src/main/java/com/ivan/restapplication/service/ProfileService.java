@@ -26,7 +26,10 @@ public class ProfileService {
     public JsonNode showUserProfile() throws JsonProcessingException {
         return mapper
                 .readTree(restTemplate
-                        .exchange("https://api.spotify.com/v1/me", HttpMethod.GET, authService.useToken(), String.class)
+                        .exchange("https://api.spotify.com/v1/me",
+                                HttpMethod.GET,
+                                authService.useToken(),
+                                String.class)
                         .getBody());
     }
 }
