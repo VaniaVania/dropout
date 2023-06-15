@@ -100,16 +100,8 @@
             <version>2.3.3.RELEASE</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.springframework.security.oauth.boot/spring-security-oauth2-autoconfigure -->
-        <dependency>
-            <groupId>org.springframework.security.oauth.boot</groupId>
-            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-            <version>2.6.6</version>
-        </dependency>
-
 
         <!--Redis Spring Session-->
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

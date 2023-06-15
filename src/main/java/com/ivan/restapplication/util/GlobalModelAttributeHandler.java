@@ -1,55 +1,42 @@
 package com.ivan.restapplication.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ivan.restapplication.service.AuthService;
-import com.ivan.restapplication.service.ProfileService;
+import com.ivan.restapplication.service.SpotifyApiService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.client.HttpClientErrorException;
 
 @ControllerAdvice
 public class GlobalModelAttributeHandler {
 
-    private final AuthService authService;
-    private final ProfileService profileService;
+    private final SpotifyApiService spotifyApiService;
 
     @Autowired
-    public GlobalModelAttributeHandler(AuthService authService, ProfileService profileService) {
-        this.authService = authService;
-        this.profileService = profileService;
+    public GlobalModelAttributeHandler(SpotifyApiService spotifyApiService) {
+        this.spotifyApiService = spotifyApiService;
     }
 
-    @ModelAttribute
+   @ModelAttribute
     public void addAttributes(Model model) throws JsonProcessingException {
-        try {
-            authService.useToken();
-        } catch (HttpClientErrorException e){
-            authService.refreshToken();
-            authService.useToken();
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        try {
-            if (authService.getToken() != null) {
-                model.addAttribute("isAuthorized", true);
-            }
+        if (!authentication.getPrincipal().toString().equals("anonymousUser") ) {
+            model.addAttribute("isAuthenticated", true);
 
-            if (!profileService.showUserProfile().findValues("url").isEmpty()) {
-                model.addAttribute("profileImage", profileService.showUserProfile()
-                        .findValues("url")
-                        .get(0)
-                        .asText());
+           if (!spotifyApiService.showUserProfile().findValues("url").isEmpty()) {
+                model.addAttribute("profileImage", spotifyApiService.showUserProfile()
+                        .findValuesAsText("url")
+                        .get(0));
 
             } else {
                 model.addAttribute("profileImage", "/images/user.png");
             }
 
-        } catch (HttpClientErrorException e) {
-            authService.logout();
+        } else {
+            model.addAttribute("isAuthenticated", false);
         }
-
-
-
     }
 }
