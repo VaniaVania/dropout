@@ -13,15 +13,15 @@
                     <a class="nav-link" href="/about">About</a>
                 </li>
 
-                <li th:if="!${isAuthorized}">
+                <li>
                     <div class="btn-group">
-                        <a class="nav-link fw-bold dropdown-item rounded-circle" th:method="GET" href="/authorize"
+                        <a th:if="!${isAuthenticated}" class="nav-link fw-bold dropdown-item rounded-circle" th:method="GET" href="/login"
                            >Sign in</a>
                     </div>
                 </li>
 
-                <li th:if="${isAuthorized}">
-                    <div class="btn-group" >
+                <li>
+                    <div th:if="${isAuthenticated}" class="btn-group" >
                         <img class="img-responsive rounded-circle dropdown-toggle" type="button"
                              data-bs-toggle="dropdown" aria-expanded="false" width="50px" height="50px"
                              th:src="${profileImage}">
@@ -30,7 +30,7 @@
                             <li role="presentation"><a class="dropdown-item d-flex gap-2 align-items-center rounded-2"
                                                        th:method="GET" href="/profile">Profile</a></li>
                             <li role="presentation"><a class="dropdown-item d-flex gap-2 align-items-center rounded-2"
-                                                       th:method="GET" href="/mylogout">Logout</a></li>
+                                                       th:method="GET" href="/logout">Logout</a></li>
                         </ul>
                     </div>
                 </li>

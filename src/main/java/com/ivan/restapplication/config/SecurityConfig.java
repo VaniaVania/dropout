@@ -4,12 +4,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -17,43 +16,46 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig{
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername("user")
-                .password(passwordEncoder.encode("password"))
-                .roles()
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .authorizeHttpRequests(authorize -> {
+                        authorize.antMatchers("/").permitAll();
+                        authorize.antMatchers("/images/**", "/styles/**").permitAll();
+                        authorize.anyRequest().authenticated();
+                })
+                .cors().disable()
+                .csrf().disable().sessionManagement().and()
+                .oauth2Login()
+                .and().logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .clearAuthentication(true)
+                .and()
                 .build();
-        return new InMemoryUserDetailsManager(user);
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/", "/authorize").permitAll()
-                .anyRequest()
-                .permitAll()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // Не создавать сессии на стороне сервера
-                .maximumSessions(1) // Максимальное количество активных сессий для одного пользователя
-                .maxSessionsPreventsLogin(true) // Запретить новую аутентификацию при достижении максимального количества сессий
-                .expiredUrl("/authorized") // URL для перенаправления при истечении срока действия сессии
-                .and()
-                .and()
-                .logout()
-                .logoutUrl("/myLogout") // URL для выполнения выхода
-                .logoutSuccessUrl("/") // URL для перенаправления после выхода
-                .invalidateHttpSession(true) // Инвалидировать сессию после выхода
-                .deleteCookies("JSESSIONID"); // Удалить куки с идентификатором сессии
-
-
-        return http.build();
+    public ClientRegistrationRepository clientRegistrationRepository() {
+        return new InMemoryClientRegistrationRepository(this.spotifyClientRegistration());
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    private ClientRegistration spotifyClientRegistration() {
+        return ClientRegistration
+                .withRegistrationId("spotify")
+                .clientId("2c8ed13da29f45b990a1ad43ba870f7d")
+                .clientSecret("c18c855bfbe442d6aed8b9df99ae131f")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .redirectUri("http://localhost:8085/login/oauth2/code/spotify")
+                .scope("playlist-modify-private", "playlist-modify-public", "user-modify-playback-state", "playlist-read-private", "playlist-modify-public", "user-follow-modify", "user-follow-read", "user-top-read", "user-read-recently-played", "user-library-modify", "user-library-read", "user-read-email", "user-read-private")
+                .authorizationUri("https://accounts.spotify.com/authorize?show_dialog=true")
+                .tokenUri("https://accounts.spotify.com/api/token")
+                .userInfoUri("https://api.spotify.com/v1/me")
+                .userNameAttributeName("display_name")
+                .clientName("spotify")
+                .build();
 
+    }
 
 
 }

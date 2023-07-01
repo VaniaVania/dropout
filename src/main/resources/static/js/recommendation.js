@@ -1,5 +1,5 @@
 function getArtistChoice() {
-    var container = document.querySelector("#artists");
+    const container = document.querySelector("#artists");
     let selectedCheckBoxes = container.querySelectorAll('input.btn-check:checked');
 
     let checkedValues = Array.from(selectedCheckBoxes).map(cb => cb.value).toLocaleString();

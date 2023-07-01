@@ -1,5 +1,6 @@
 package com.ivan.restapplication.models;
 
+
 import javax.persistence.*;
 
 @Entity

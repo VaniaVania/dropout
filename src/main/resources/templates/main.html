@@ -38,8 +38,7 @@
                 <div class="carousel-caption">
                     <h2>Dropout</h2>
                     <p>Explore your unique tastes of music, using our collector algorithms</p>
-                    <p><a class="btn btn-secondary mt-auto" href="/authorize" id="loginButton" role="button"
-                          th:if="!${isAuthorized}">Login
+                    <p><a th:if="!${isAuthenticated}" class="btn btn-secondary mt-auto" href="/login" id="loginButton" role="button">Login
                         with Spotify</a></p>
                 </div>
 
@@ -49,9 +48,8 @@
                 <div class="carousel-caption">
                     <h1 class="text-dark">Features</h1>
                     <p class="text-dark">Find your individual range of emotions</p>
-                    <p><a class="btn btn-secondary mt-auto" href="/authorize" id="featureButton" role="button"
-                          th:if="!${isAuthorized}">Login with Spotify</a></p>
-                    <p><a class="btn btn-lg" href="/features" role="button" th:if="${isAuthorized}">Go to features</a>
+                    <p>
+                    <p><a class="btn btn-lg" href="/features" role="button">Go to features</a>
                     </p>
                 </div>
             </div>
@@ -60,9 +58,7 @@
                 <div class="carousel-caption">
                     <h1>Management</h1>
                     <p>Try to sort your preferences</p>
-                    <p><a class="btn btn-secondary mt-auto" href="/authorize" id="categoryButton" role="button"
-                          th:if="!${isAuthorized}">Login with Spotify</a></p>
-                    <p><a class="btn btn-lg" href="/manage" role="button" th:if="${isAuthorized}">Manage</a></p>
+                    <p><a class="btn btn-lg" href="/manage" role="button">Manage</a></p>
                 </div>
             </div>
         </div>
@@ -89,9 +85,7 @@
                     <h2>Manage</h2>
                     <p>Your perfect guys</p>
                     <p class=""><a class="btn btn-secondary mt-auto" href="/manage" role="button"
-                                   th:if="${isAuthorized}">See more »</a></p>
-                    <p class=""><a class="btn btn-secondary mt-auto" href="/authorize" role="button"
-                                   th:if="!${isAuthorized}">See more »</a></p>
+                    >See more »</a></p>
                 </div>
             </div>
             <div class="col align-self-end">
@@ -100,9 +94,7 @@
                 <div class="text-center">
                     <h2>Explore</h2>
                     <p>Unique tracks that always on repeat</p>
-                    <p><a class="btn btn-secondary mt-auto" href="/features" role="button" th:if="${isAuthorized}">See
-                        more »</a></p>
-                    <p><a class="btn btn-secondary mt-auto" href="/authorize" role="button" th:if="!${isAuthorized}">See
+                    <p><a class="btn btn-secondary mt-auto" href="/features" role="button">See
                         more »</a></p>
                 </div>
             </div>

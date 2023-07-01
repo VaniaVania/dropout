@@ -1,7 +1,7 @@
 package com.ivan.restapplication.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ivan.restapplication.service.TopTrackService;
+import com.ivan.restapplication.service.AnalysisService;
 import com.ivan.restapplication.util.NotListeningUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,19 +16,17 @@ import java.util.NoSuchElementException;
 @RequestMapping("/features")
 public class FeatureController {
 
-    private final TopTrackService topTrackService;
+    private final AnalysisService analysisService;
 
     @Autowired
-    public FeatureController(TopTrackService topTrackService) {
-        this.topTrackService = topTrackService;
+    public FeatureController(AnalysisService analysisService) {
+        this.analysisService = analysisService;
     }
 
     @GetMapping()
     public String features(@RequestParam(defaultValue = "short_term") String time_range, @RequestParam(defaultValue = "acousticness") String feature, Model model) throws JsonProcessingException {
-        //Track Card
         try {
-            model.addAttribute("track", topTrackService.findTrackFeature(feature, time_range));
-
+            model.addAttribute("track", analysisService.findMinMaxTrackFeatures(feature, time_range));
             model.addAttribute("feature", feature);
             model.addAttribute("term", time_range);
             return "features";
