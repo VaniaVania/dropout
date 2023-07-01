@@ -3,10 +3,12 @@ package com.ivan.restapplication.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.context.annotation.SessionScope;
 
 @Configuration
 @ConfigurationProperties(prefix = "spotify.client")
 @PropertySource("classpath:application.properties")
+@SessionScope
 public class SpotifyProperties {
 
     private String clientId;
@@ -14,10 +16,11 @@ public class SpotifyProperties {
     private String redirectUri;
     private String responseType;
     private String grantType;
+    private String scope;
     private boolean showDialog;
-    private String token = null;
-    private String refreshToken = null;
-    private String code = null;
+    private String token;
+    private String refreshToken;
+    private String code;
 
     public String getClientId() {
         return clientId;
@@ -89,5 +92,13 @@ public class SpotifyProperties {
 
     public void setShowDialog(boolean showDialog) {
         this.showDialog = showDialog;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 }
