@@ -1,6 +1,9 @@
 package com.ivan.restapplication.config;
 
-import com.ivan.restapplication.service.SpotifyApiService;
+import com.ivan.restapplication.service.AnalysisService;
+import com.ivan.restapplication.service.GenresService;
+import com.ivan.restapplication.service.TrackService;
+import com.ivan.restapplication.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
@@ -18,22 +21,42 @@ public class ApiConfig {
 
     @Bean
     @RequestScope
-    public SpotifyApiService spotifyApiService(OAuth2AuthorizedClientService clientService) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String accessToken = null;
+    public UserService userService(OAuth2AuthorizedClientService clientService) {
+        return new UserService(authentication(clientService));
+    }
 
+    @Bean
+    @RequestScope
+    public AnalysisService analysisService(OAuth2AuthorizedClientService clientService) {
+        return new AnalysisService(authentication(clientService));
+    }
+
+    @Bean
+    @RequestScope
+    public TrackService trackService(OAuth2AuthorizedClientService clientService) {
+        return new TrackService(authentication(clientService));
+    }
+
+    @Bean
+    @RequestScope
+    public GenresService genresService(OAuth2AuthorizedClientService clientService) {
+        return new GenresService(authentication(clientService));
+    }
+
+    private String authentication(OAuth2AuthorizedClientService clientService){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getClass().isAssignableFrom(OAuth2AuthenticationToken.class)) {
             OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
-
-            String clientRegistrationId = oauthToken.getAuthorizedClientRegistrationId();
-            if (clientRegistrationId.equals("spotify")) {
-
-                    OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(clientRegistrationId, oauthToken.getName());
-                    accessToken = client.getAccessToken().getTokenValue();
-
+            if (oauthToken.getAuthorizedClientRegistrationId().equals("spotify")) {
+                OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(oauthToken.getAuthorizedClientRegistrationId(), oauthToken.getName());
+                if (client == null) {
+                    clientService.removeAuthorizedClient(oauthToken.getAuthorizedClientRegistrationId(), oauthToken.getName());
+                } else {
+                    return client.getAccessToken().getTokenValue();
+                }
             }
         }
-        return new SpotifyApiService(accessToken);
+        return null;
     }
 
     @Bean
@@ -51,7 +74,6 @@ public class ApiConfig {
 
         DefaultOAuth2AuthorizedClientManager authorizedClientManager = new DefaultOAuth2AuthorizedClientManager(clientRegistrationRepository, authorizedClientRepository);
         authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
-
         return authorizedClientManager;
     }
 

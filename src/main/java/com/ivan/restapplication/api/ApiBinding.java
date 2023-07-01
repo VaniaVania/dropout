@@ -1,9 +1,11 @@
 package com.ivan.restapplication.api;
 
+import com.ivan.restapplication.util.UnauthorizedUserException;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
 
-public abstract class ApiBinding {
+
+public class ApiBinding {
 
     protected RestTemplate restTemplate;
 
@@ -25,7 +27,7 @@ public abstract class ApiBinding {
 
     private ClientHttpRequestInterceptor getNoTokenInterceptor() {
         return (request, body, execution) -> {
-            throw new IllegalStateException("Can't access the API without an access token");
+            throw new UnauthorizedUserException();
         };
     }
 }

@@ -24,13 +24,12 @@ public class SecurityConfig{
                         authorize.anyRequest().authenticated();
                 })
                 .cors().disable()
-                .csrf().disable()
+                .csrf().disable().sessionManagement().and()
                 .oauth2Login()
                 .and().logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .clearAuthentication(true)
-                .invalidateHttpSession(true).deleteCookies("JSESSIONID").deleteCookies("SESSION")
                 .and()
                 .build();
     }

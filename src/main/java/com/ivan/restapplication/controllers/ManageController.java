@@ -1,7 +1,8 @@
 package com.ivan.restapplication.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ivan.restapplication.service.SpotifyApiService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.ivan.restapplication.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +17,17 @@ import java.util.Map;
 @RequestMapping("/manage")
 public class ManageController {
 
-    private final SpotifyApiService spotifyApiService;
+    private final SpotifyTracksService trackService;
+    private final SpotifyUserService userService;
+    private final SpotifyGenresService genresService;
+    private final AnalysisService analysisService;
 
     @Autowired
-    public ManageController(SpotifyApiService spotifyApiService) {
-        this.spotifyApiService = spotifyApiService;
+    public ManageController(TrackService trackService, UserService userService, SpotifyGenresService genresService, AnalysisService analysisService) {
+        this.trackService = trackService;
+        this.userService = userService;
+        this.genresService = genresService;
+        this.analysisService = analysisService;
     }
 
     @GetMapping
@@ -31,7 +38,7 @@ public class ManageController {
     @GetMapping("/recommendation")
     public String recommendedArtists(@RequestParam String seed_artists, @RequestParam String seed_tracks, @RequestParam String seed_genres, Model model, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         try {
-            model.addAttribute("spotifySuggestedArtists", spotifyApiService.getSpotifySuggestedTracks(seed_artists, seed_tracks, seed_genres));
+            model.addAttribute("spotifySuggestedArtists", trackService.getRecommendations(seed_artists, seed_tracks, seed_genres));
         } catch (HttpClientErrorException ex) {
             redirectAttributes.addFlashAttribute("generateError", "Choose the right amount of seed");
             return "redirect:/manage#generateNav";
@@ -42,7 +49,7 @@ public class ManageController {
     @DeleteMapping("/unfollow")
     public String unfollowArtists(@RequestParam String ids, RedirectAttributes redirectAttributes) {
         try {
-            spotifyApiService.unfollowArtists(ids);
+            userService.unfollowArtists(ids);
         } catch (HttpClientErrorException e) {
             redirectAttributes.addFlashAttribute("error", "Choose the right amount of artists");
         }
@@ -52,7 +59,7 @@ public class ManageController {
     @PutMapping("/follow")
     public String followArtists(@RequestParam String ids, RedirectAttributes redirectAttributes) {
         try {
-            spotifyApiService.followArtists(ids);
+            userService.followArtists(ids);
         } catch (HttpClientErrorException e) {
             redirectAttributes.addFlashAttribute("error", "Choose the right amount of artists");
         }
@@ -61,11 +68,13 @@ public class ManageController {
 
     @ModelAttribute
     public void attributes(Model model) throws JsonProcessingException {
+        JsonNode followedArtistsNode = userService.getFollowedArtists();
+
         model.addAllAttributes(Map.of(
-                "followedArtists", spotifyApiService.getFollowedArtists(),
-                "suggestArtists", spotifyApiService.getSuggestedArtists(),
-                "topTracks", spotifyApiService.findTopTracks("short_term"),
-                "availableGenres", spotifyApiService.getAvailableGenresSeeds()
+                "followedArtists", followedArtistsNode,
+                "suggestArtists", analysisService.getSuggestedArtists(followedArtistsNode),
+                "topTracks", userService.findTopTracks("short_term"),
+                "availableGenres", genresService.getAvailableGenresSeeds()
         ));
     }
 
