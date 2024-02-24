@@ -1,5 +1,6 @@
 package com.ivan.restapplication.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +15,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig{
+
+    @Value(value = "${spring.security.oauth2.client.registration.spotify.client-id}")
+    private String clientId;
+
+    @Value(value = "${spring.security.oauth2.client.registration.spotify.client-secret}")
+    private String clientSecret;
+
+    @Value(value = "${app.spotify.redirect_url}")
+    private String redirectUri;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,11 +52,11 @@ public class SecurityConfig{
     private ClientRegistration spotifyClientRegistration() {
         return ClientRegistration
                 .withRegistrationId("spotify")
-                .clientId("2c8ed13da29f45b990a1ad43ba870f7d")
-                .clientSecret("c18c855bfbe442d6aed8b9df99ae131f")
+                .clientId(clientId)
+                .clientSecret(clientSecret)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .redirectUri("http://localhost:8085/login/oauth2/code/spotify")
+                .redirectUri(redirectUri)
                 .scope("playlist-modify-private", "playlist-modify-public", "user-modify-playback-state", "playlist-read-private", "playlist-modify-public", "user-follow-modify", "user-follow-read", "user-top-read", "user-read-recently-played", "user-library-modify", "user-library-read", "user-read-email", "user-read-private")
                 .authorizationUri("https://accounts.spotify.com/authorize?show_dialog=true")
                 .tokenUri("https://accounts.spotify.com/api/token")

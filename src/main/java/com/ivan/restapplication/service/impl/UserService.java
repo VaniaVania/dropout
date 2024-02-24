@@ -1,13 +1,15 @@
-package com.ivan.restapplication.service;
+package com.ivan.restapplication.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.ivan.restapplication.api.ApiBinding;
 import com.ivan.restapplication.dto.UserDTO;
+import com.ivan.restapplication.service.SpotifyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -15,15 +17,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
-public class UserService extends ApiBinding implements SpotifyUserService {
+@Service
+public class UserService implements SpotifyUserService {
 
     @Autowired
     private ObjectMapper mapper;
 
-    public UserService(String accessToken) {
-        super(accessToken);
-    }
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public JsonNode showUserProfile() throws JsonProcessingException {
@@ -52,7 +53,7 @@ public class UserService extends ApiBinding implements SpotifyUserService {
     }
 
     @Override
-    public JsonNode getFollowedArtists() throws JsonProcessingException {
+    public JsonNode findFollowedArtists() throws JsonProcessingException {
         JsonNode followedArtistsJson = mapper
                 .readTree(restTemplate
                         .getForObject("https://api.spotify.com/v1/me/following?type=artist&limit=50", String.class)
@@ -77,7 +78,6 @@ public class UserService extends ApiBinding implements SpotifyUserService {
                 .stream()
                 .sorted(Comparator.comparing(o -> o.get("name").asText()))
                 .collect(Collectors.toList());
-        //create ArrayNode
         return mapper.createObjectNode().arrayNode().addAll(sortedDataNodes);  //TODO
     }
 

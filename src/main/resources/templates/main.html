@@ -20,7 +20,6 @@
 
 <main>
     <header th:insert="elements/header :: header"></header>
-    <br>
     <div class="carousel slide" data-bs-ride="carousel" id="carouselExampleCaptions">
         <div class="carousel-indicators">
             <button aria-current="true" aria-label="Slide 1" class="active" data-bs-slide-to="0"
@@ -32,16 +31,13 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-
                 <img alt="haha" class="img-fluid" height="100%" src="/images/testtrue.jfif" width="100%">
-
                 <div class="carousel-caption">
                     <h2>Dropout</h2>
                     <p>Explore your unique tastes of music, using our collector algorithms</p>
-                    <p><a th:if="!${isAuthenticated}" class="btn btn-secondary mt-auto" href="/login" id="loginButton" role="button">Login
+                    <p><a th:if="!${isAuthenticated}" class="btn btn-lg" href="/login" id="loginButton" role="button">Login
                         with Spotify</a></p>
                 </div>
-
             </div>
             <div class="carousel-item">
                 <img alt="haha" class="img-fluid" height="100%" src="/images/emoji2.png" width="100%">
@@ -109,7 +105,6 @@
             </div>
         </div>
     </div>
-
 </main>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package com.ivan.restapplication.models;
+package com.ivan.restapplication.entity;
 
 import javax.persistence.*;
 

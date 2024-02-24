@@ -1,4 +1,4 @@
-package com.ivan.restapplication.models;
+package com.ivan.restapplication.entity;
 
 import javax.persistence.*;
 
@@ -11,6 +11,7 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "url")
     private String url;
 
     private Integer height, weight;

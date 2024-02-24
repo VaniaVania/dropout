@@ -1,6 +1,6 @@
-package com.ivan.restapplication.service;
+package com.ivan.restapplication.service.impl;
 
-import com.ivan.restapplication.models.*;
+import com.ivan.restapplication.entity.*;
 import com.ivan.restapplication.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@Transactional
 public class SavedUserService {
 
     private final UsersRepository usersRepository;
@@ -21,12 +20,7 @@ public class SavedUserService {
     }
 
     @Transactional
-    public boolean save(User user) {
-
-        if (usersRepository.findById(user.getId()).isPresent()) {
-            return false;
-        }
-
+    public User save(User user) {
         Follower follower = user.getFollowers();
         follower.setUser(user);
 
@@ -43,7 +37,10 @@ public class SavedUserService {
 
         user.setCountryImage("https://countryflagsapi.com/png/" + user.getCountry().toLowerCase());
 
-        usersRepository.save(user);
-        return true;
+        return usersRepository.save(user);
+    }
+
+    public boolean existsById(String id){
+        return usersRepository.existsById(id);
     }
 }

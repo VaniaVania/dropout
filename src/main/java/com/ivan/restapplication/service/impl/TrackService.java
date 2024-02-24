@@ -1,12 +1,15 @@
-package com.ivan.restapplication.service;
+package com.ivan.restapplication.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ivan.restapplication.api.ApiBinding;
+import com.ivan.restapplication.service.SpotifyTracksService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-public class TrackService extends ApiBinding implements SpotifyTracksService {
+@Service
+public class TrackService implements SpotifyTracksService {
 
     @Autowired
     private ObjectMapper mapper;
@@ -14,9 +17,8 @@ public class TrackService extends ApiBinding implements SpotifyTracksService {
     @Autowired
     private AnalysisService analysisService;
 
-    public TrackService(String accessToken) {
-        super(accessToken);
-    }
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public JsonNode getRecommendations(String seed_artists, String seed_tracks, String seed_genres) throws JsonProcessingException {
@@ -29,6 +31,6 @@ public class TrackService extends ApiBinding implements SpotifyTracksService {
     public JsonNode getTracksAudioFeatures(String feature, String term) throws JsonProcessingException {
         return mapper
                 .readTree(restTemplate
-                        .getForObject("https://api.spotify.com/v1/audio-features?ids=" + analysisService.getTopTrackIds(term), String.class));
+                        .getForObject("https://api.spotify.com/v1/audio-features?ids=" + analysisService.findTopTrackIds(term), String.class));
     }
 }

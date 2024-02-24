@@ -1,19 +1,21 @@
-package com.ivan.restapplication.service;
+package com.ivan.restapplication.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ivan.restapplication.api.ApiBinding;
+import com.ivan.restapplication.service.SpotifyGenresService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-public class GenresService extends ApiBinding implements SpotifyGenresService {
+@Service
+public class GenresService implements SpotifyGenresService {
 
     @Autowired
     private ObjectMapper mapper;
 
-    public GenresService(String accessToken) {
-        super(accessToken);
-    }
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public JsonNode getAvailableGenresSeeds() throws JsonProcessingException {

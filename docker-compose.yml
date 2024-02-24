@@ -1,24 +1,21 @@
-        version: '3.2'
+version: '3.2'
 
-        services:
-          app:
-            image: 'docker-spring-boot-postgres:latest'
-            build: ./
-            ports:
-              - "8085:8085"
-            container_name: app
-            depends_on:
-              - db
-            environment:
-              - SPRING_DATASOURCE_USERNAME=postgres
-              - SPRING_DATASOURCE_PASSWORD=111111
-              - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-          db:
-            image: 'postgres:13.1-alpine'
-            ports:
-              - "5432:5432"
-            container_name: db
-            environment:
-              - POSTGRES_USER=postgres
-              - POSTGRES_PASSWORD=111111
-              - POSTGRES_DB=postgres
+services:
+  app:
+    image: 'docker-spring-boot-postgres:latest'
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8080"
+    container_name: dropout_app
+    depends_on:
+      - db
+    env_file:
+      - .env
+  db:
+    image: postgres:latest
+    ports:
+      - "5433:5432"
+    container_name: postgres
+    env_file:
+      - .env

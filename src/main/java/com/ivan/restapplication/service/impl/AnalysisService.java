@@ -1,18 +1,20 @@
-package com.ivan.restapplication.service;
+package com.ivan.restapplication.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.ivan.restapplication.api.ApiBinding;
-import com.ivan.restapplication.dto.UserDTO;
-import com.ivan.restapplication.util.NotListeningUserException;
+import com.ivan.restapplication.exception.NotListeningUserException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class AnalysisService extends ApiBinding {
+@Service
+public class AnalysisService{
 
     @Autowired
     private ObjectMapper mapper;
@@ -20,10 +22,10 @@ public class AnalysisService extends ApiBinding {
     @Autowired
     private UserService userService;
 
-    public AnalysisService(String accessToken) {
-        super(accessToken);
-    }
+    @Autowired
+    private RestTemplate restTemplate;
 
+    @Cacheable(cacheNames = "topArtistsCache")
     public JsonNode findTopArtistsAllTime() throws JsonProcessingException {
         ArrayNode node = mapper.createArrayNode();
 
@@ -38,7 +40,7 @@ public class AnalysisService extends ApiBinding {
         return node;
     }
 
-    public List<String> getTopArtistsGenres(String term) throws JsonProcessingException {
+    public List<String> findTopArtistsGenres(String term) throws JsonProcessingException {
         List<String> tracksIds = new ArrayList<>(); // List of tracks ids
 
         userService.findTopArtists(term).findValue("genres").forEach(el -> tracksIds
@@ -47,13 +49,12 @@ public class AnalysisService extends ApiBinding {
     }
 
 
-    public String getTopTrackIds(String term) throws JsonProcessingException {
+    public String findTopTrackIds(String term) throws JsonProcessingException {
         List<String> trackIds = new ArrayList<>(); // List of tracks ids
         JsonNode topTracksNode = userService.findTopTracks(term);
 
         topTracksNode.forEach(el -> trackIds
-                .add(el.get("id")
-                        .asText()));       // Adding ids to a list
+                .add(el.get("id").asText()));       // Adding ids to a list
         return trackIds.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining(",", "", ""));
@@ -61,8 +62,9 @@ public class AnalysisService extends ApiBinding {
 
 
     public ArrayNode findMinMaxTrackFeatures(String feature, String term) throws JsonProcessingException, NotListeningUserException {
-        Map<Float, JsonNode> trackListMap = new HashMap<>();  //Map with float value of feature, and track href
-        String topIds = getTopTrackIds(term);
+        Map<Float, JsonNode> trackListMap = new TreeMap<>();  //Map with float value of feature, and track href
+        String topIds = findTopTrackIds(term);
+        ArrayNode minMaxValueNode = mapper.createArrayNode();
 
         JsonNode featureNode = mapper
                 .readTree(restTemplate
@@ -73,7 +75,6 @@ public class AnalysisService extends ApiBinding {
                     .forEach(f -> trackListMap.put(f.get(feature).floatValue(), f.get("track_href")));     //Forming map  --> [ 0.5 , href ]
         }
 
-        ArrayNode minMaxValueNode = mapper.createArrayNode();
         minMaxValueNode.add(mapper
                 .readTree(restTemplate
                         .getForObject(trackListMap.get(Collections.max(trackListMap.keySet())).asText(), String.class)
@@ -86,10 +87,9 @@ public class AnalysisService extends ApiBinding {
         return minMaxValueNode;
     }
 
-
-    public JsonNode getSuggestedArtists(JsonNode followedArtistsNode) throws JsonProcessingException {
+    @Cacheable(cacheNames = "suggestCache",key = "#followedArtistsNode")
+    public JsonNode findSuggestedArtists(JsonNode followedArtistsNode) throws JsonProcessingException {
         ArrayNode suggestNode = mapper.createArrayNode();
-
         JsonNode topArtistsAllTimeNode = findTopArtistsAllTime();
         List<String> followedArtistsNodeIds = followedArtistsNode.findValuesAsText("id");
 

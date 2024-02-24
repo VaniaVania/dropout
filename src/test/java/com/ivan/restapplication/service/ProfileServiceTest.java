@@ -3,19 +3,19 @@ package com.ivan.restapplication.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ivan.restapplication.service.impl.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.*;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.web.client.RestTemplate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ProfileServiceTest {
-    @Mock
-    private AuthService authService;
 
     @Mock
     private RestTemplate restTemplate;
@@ -26,15 +26,15 @@ class ProfileServiceTest {
     @Mock
     private JsonNode jsonNode;
 
-    private ProfileService profileService;
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        profileService = new ProfileService(authService, restTemplate, mapper);
     }
 
     @Test()
+    @WithMockUser(username = "user1", authorities = {"ROLE_USER"})
     void showUserProfileSuccess() throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -43,7 +43,7 @@ class ProfileServiceTest {
         String responseBody = "{ \"name\": \"John Doe\", \"email\": \"john@example.com\" }";
         ResponseEntity<String> responseEntity = new ResponseEntity<>(responseBody, HttpStatus.OK);
 
-        when(authService.useToken()).thenReturn(entity);
+        //when(authService.useToken()).thenReturn(entity);
         when(restTemplate.exchange(
                 "https://api.spotify.com/v1/me",
                 HttpMethod.GET,
@@ -52,9 +52,9 @@ class ProfileServiceTest {
         )).thenReturn(responseEntity);
         when(mapper.readTree(responseBody)).thenReturn(jsonNode);
 
-        JsonNode result = profileService.showUserProfile();
+        JsonNode result = userService.showUserProfile();
 
-        verify(authService).useToken();
+        //verify(authService).useToken();
         verify(restTemplate).exchange(
                 "https://api.spotify.com/v1/me",
                 HttpMethod.GET,

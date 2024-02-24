@@ -3,6 +3,9 @@ package com.ivan.restapplication.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ivan.restapplication.service.*;
+import com.ivan.restapplication.service.impl.AnalysisService;
+import com.ivan.restapplication.service.impl.TrackService;
+import com.ivan.restapplication.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,6 +56,7 @@ public class ManageController {
         } catch (HttpClientErrorException e) {
             redirectAttributes.addFlashAttribute("error", "Choose the right amount of artists");
         }
+
         return "redirect:/manage";
     }
 
@@ -68,11 +72,10 @@ public class ManageController {
 
     @ModelAttribute
     public void attributes(Model model) throws JsonProcessingException {
-        JsonNode followedArtistsNode = userService.getFollowedArtists();
-
+        JsonNode followedArtistsNode = userService.findFollowedArtists();
         model.addAllAttributes(Map.of(
                 "followedArtists", followedArtistsNode,
-                "suggestArtists", analysisService.getSuggestedArtists(followedArtistsNode),
+                "suggestArtists", analysisService.findSuggestedArtists(followedArtistsNode),
                 "topTracks", userService.findTopTracks("short_term"),
                 "availableGenres", genresService.getAvailableGenresSeeds()
         ));

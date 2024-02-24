@@ -53,7 +53,7 @@
                             <div class="col-md-2">
                                 <img alt="..."
                                      class="img-fluid rounded-5"
-                                     th:src="${artist.get('images').get(1).get('url').asText()}">
+                                     th:src="${artist.get('images').get(0).get('url').asText()}">
                             </div>
 
                             <div class="col-md-8">
@@ -81,7 +81,7 @@
                             <div class="col-md-2">
                                 <img alt="..."
                                      class="img-fluid rounded-5"
-                                     th:src="${suggest.get('images').get(1).get('url').asText()}">
+                                     th:src="${suggest.get('images').get(0).get('url').asText()}">
                             </div>
 
                             <div class="col-md-8">

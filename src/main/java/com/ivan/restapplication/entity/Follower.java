@@ -1,4 +1,4 @@
-package com.ivan.restapplication.models;
+package com.ivan.restapplication.entity;
 
 import javax.persistence.*;
 
@@ -11,8 +11,10 @@ public class Follower {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "href")
     private String href;
 
+    @Column(name = "total")
     private Integer total;
 
     @OneToOne()

@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @ControllerAdvice
 public class GlobalModelAttributeHandler {
 
-    @Autowired
-    private SpotifyUserService service;
+    private final SpotifyUserService service;
 
-   @ModelAttribute
+    @Autowired
+    public GlobalModelAttributeHandler(SpotifyUserService service) {
+        this.service = service;
+    }
+
+    @ModelAttribute
     public void addAttributes(Model model) throws JsonProcessingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         if (authentication.getPrincipal().toString().equals("anonymousUser") ) {
             model.addAttribute("isAuthenticated", false);
 
@@ -26,10 +29,7 @@ public class GlobalModelAttributeHandler {
             model.addAttribute("isAuthenticated", true);
 
             if (!service.showUserProfile().findValues("url").isEmpty()) {
-                model.addAttribute("profileImage", service.showUserProfile()
-                        .findValues("url")
-                        .get(0)
-                        .asText());
+                model.addAttribute("profileImage", service.showUserProfile().findValues("url").get(1).asText());
 
             } else {
                 model.addAttribute("profileImage", "/images/user.png");

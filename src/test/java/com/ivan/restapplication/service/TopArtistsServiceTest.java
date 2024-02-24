@@ -4,7 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import org.junit.jupiter.api.Assertions;
+import com.ivan.restapplication.service.impl.AnalysisService;
+import com.ivan.restapplication.service.impl.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.RestTemplate;
@@ -30,7 +32,10 @@ public class TopArtistsServiceTest {
     private RestTemplate restTemplate;
 
     @Autowired
-    private TopArtistService topArtistService;
+    private UserService userService;
+
+    @Autowired
+    private AnalysisService analysisService;
 
     @Autowired
     private ObjectMapper mapper;
@@ -45,16 +50,19 @@ public class TopArtistsServiceTest {
         terms.add("short_term");
         terms.add("medium_term");
         terms.add("long_term");
+
+        System.out.println("Before each!");
     }
 
     @Test
+    @WithUserDetails()
     public void testFindTopArtists() throws Exception {
         String apiResponse = "{\"items\": [\"Artist 1\", \"Artist 2\"]}";
         mockServer.expect(requestTo("https://api.spotify.com/v1/me/top/artists?limit=50&time_range=" + terms.stream().findAny().orElseThrow()))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(MockRestResponseCreators.withSuccess(apiResponse, MediaType.APPLICATION_JSON));
 
-        JsonNode actual = topArtistService.findTopArtists(terms.stream().findAny().orElseThrow());
+        JsonNode actual = userService.findTopArtists(terms.stream().findAny().orElseThrow());
         mockServer.verify();
         assertThat(actual.toString()).isEqualTo("[\"Artist 1\",\"Artist 2\"]");
     }
@@ -71,7 +79,7 @@ public class TopArtistsServiceTest {
             node.add(Mockito.anyString());
         }
 
-        JsonNode actual = topArtistService.findTopArtistsAllTime();
+        JsonNode actual = analysisService.findTopArtistsAllTime();
         mockServer.verify();
         assertThat(node).isNotEmpty();
         assertThat(actual.toString()).isEqualTo("[[\"Artist 1\",\"Artist 2\"],[\"Artist 1\",\"Artist 2\"],[\"Artist 1\",\"Artist 2\"]]");

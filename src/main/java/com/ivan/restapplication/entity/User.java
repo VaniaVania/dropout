@@ -1,4 +1,4 @@
-package com.ivan.restapplication.models;
+package com.ivan.restapplication.entity;
 
 
 import javax.persistence.*;
@@ -29,7 +29,7 @@ public class User {
     @Column(name = "spotify_id")
     private String id;
 
-    @Column
+    @Column(name = "product")
     private String product;
 
     @Column(name = "type")
@@ -61,6 +61,10 @@ public class User {
     private LocalDateTime createdAt;
 
     public User() {
+    }
+
+    public User(String country) {
+        this.country = country;
     }
 
     public User(String country, String displayName, String email, String href, String id, String product, String type, String uri, String countryImage, ExplicitContent explicit_content, ExternalUrl external_urls, Follower followers, List<Image> images, LocalDateTime createdAt) {

@@ -1,4 +1,4 @@
-package com.ivan.restapplication.util;
+package com.ivan.restapplication.exception;
 
 public class UnauthorizedUserException extends RuntimeException{
 }

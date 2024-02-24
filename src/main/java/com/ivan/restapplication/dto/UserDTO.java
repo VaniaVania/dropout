@@ -1,9 +1,9 @@
 package com.ivan.restapplication.dto;
 
-import com.ivan.restapplication.models.ExplicitContent;
-import com.ivan.restapplication.models.ExternalUrl;
-import com.ivan.restapplication.models.Follower;
-import com.ivan.restapplication.models.Image;
+import com.ivan.restapplication.entity.ExplicitContent;
+import com.ivan.restapplication.entity.ExternalUrl;
+import com.ivan.restapplication.entity.Follower;
+import com.ivan.restapplication.entity.Image;
 
 import java.util.List;
 

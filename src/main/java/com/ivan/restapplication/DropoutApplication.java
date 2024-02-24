@@ -2,12 +2,12 @@ package com.ivan.restapplication;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
-public class RestApplication {
+@EnableCaching
+public class DropoutApplication {
     public static void main(String[] args) {
-        SpringApplication.run(RestApplication.class,args);
+        SpringApplication.run(DropoutApplication.class,args);
     }
 }
