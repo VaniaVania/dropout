@@ -16,7 +16,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = NotListeningUserException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ApplicationException handleNotListeningUserException(NotListeningUserException e) {
-        return NotListeningUserException.builder()
+        return ApplicationException.builder()
                 .message("Not valid data")
                 .exceptionMessage(e.getMessage())
                 .statusCode(HttpStatus.BAD_REQUEST)

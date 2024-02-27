@@ -4,43 +4,45 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.ivan.restapplication.entity.enums.Term;
 import com.ivan.restapplication.exception.NotListeningUserException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Service
-public class AnalysisService{
+@RequiredArgsConstructor
+public class AnalysisService {
 
-    @Autowired
-    private ObjectMapper mapper;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private RestTemplate restTemplate;
+    private final ObjectMapper mapper;
+    private final UserService userService;
+    private final RestTemplate restTemplate;
 
     @Cacheable(cacheNames = "topArtistsCache")
-    public JsonNode findTopArtistsAllTime() throws JsonProcessingException {
+    public JsonNode findTopArtistsAllTime() {
         ArrayNode node = mapper.createArrayNode();
-
-        List<String> terms = new ArrayList<>();
-        terms.add("short_term");
-        terms.add("medium_term");
-        terms.add("long_term");
-
-        for (String term : terms) {
-            node.add(userService.findTopArtists(term));
-        }
+        Arrays.stream(Term.values()).forEach(term -> {
+            try {
+                node.add(userService.findTopArtists(term.getValue()));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        });
         return node;
     }
 
-    public List<String> findTopArtistsGenres(String term) throws JsonProcessingException {
+    @SneakyThrows
+    public List<String> findTopArtistsGenres(String term) {
         List<String> tracksIds = new ArrayList<>(); // List of tracks ids
 
         userService.findTopArtists(term).findValue("genres").forEach(el -> tracksIds
@@ -48,8 +50,8 @@ public class AnalysisService{
         return tracksIds;
     }
 
-
-    public String findTopTrackIds(String term) throws JsonProcessingException {
+    @SneakyThrows
+    public String findTopTrackIds(String term) {
         List<String> trackIds = new ArrayList<>(); // List of tracks ids
         JsonNode topTracksNode = userService.findTopTracks(term);
 
@@ -61,7 +63,8 @@ public class AnalysisService{
     }
 
 
-    public ArrayNode findMinMaxTrackFeatures(String feature, String term) throws JsonProcessingException, NotListeningUserException {
+    @SneakyThrows
+    public ArrayNode findMinMaxTrackFeatures(String feature, String term) throws NotListeningUserException {
         Map<Float, JsonNode> trackListMap = new TreeMap<>();  //Map with float value of feature, and track href
         String topIds = findTopTrackIds(term);
         ArrayNode minMaxValueNode = mapper.createArrayNode();
@@ -70,30 +73,31 @@ public class AnalysisService{
                 .readTree(restTemplate
                         .getForObject("https://api.spotify.com/v1/audio-features?ids=" + topIds, String.class));
 
-        if (!featureNode.get("audio_features").asText().equals("[null]")) {
+        if (!featureNode.get("audio_features").toString().equals("[null]")) {
             featureNode.get("audio_features")
                     .forEach(f -> trackListMap.put(f.get(feature).floatValue(), f.get("track_href")));     //Forming map  --> [ 0.5 , href ]
+
+
+            minMaxValueNode.add(mapper
+                    .readTree(restTemplate
+                            .getForObject(trackListMap.get(Collections.max(trackListMap.keySet())).asText(), String.class)
+                    ));   //max value
+
+            minMaxValueNode.add(mapper
+                    .readTree(restTemplate
+                            .getForObject(trackListMap.get(Collections.min(trackListMap.keySet())).asText(), String.class)
+                    ));  //min value
         }
-
-        minMaxValueNode.add(mapper
-                .readTree(restTemplate
-                        .getForObject(trackListMap.get(Collections.max(trackListMap.keySet())).asText(), String.class)
-                ));   //max value
-
-        minMaxValueNode.add(mapper
-                .readTree(restTemplate
-                        .getForObject(trackListMap.get(Collections.min(trackListMap.keySet())).asText(), String.class)
-                ));  //min value
         return minMaxValueNode;
     }
 
-    @Cacheable(cacheNames = "suggestCache",key = "#followedArtistsNode")
-    public JsonNode findSuggestedArtists(JsonNode followedArtistsNode) throws JsonProcessingException {
+    @Cacheable(cacheNames = "suggestCache", key = "#followedArtistsNode")
+    public JsonNode findSuggestedArtists(JsonNode followedArtistsNode) {
         ArrayNode suggestNode = mapper.createArrayNode();
         JsonNode topArtistsAllTimeNode = findTopArtistsAllTime();
         List<String> followedArtistsNodeIds = followedArtistsNode.findValuesAsText("id");
 
-        for (JsonNode termNode: topArtistsAllTimeNode) {
+        for (JsonNode termNode : topArtistsAllTimeNode) {
             for (JsonNode el : termNode) {
                 if (!followedArtistsNodeIds.contains(el.get("id").asText()) && !suggestNode.findValuesAsText("id").contains(el.get("id").asText())) {
                     suggestNode.add(el);

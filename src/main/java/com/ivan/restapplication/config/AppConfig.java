@@ -36,7 +36,7 @@ public class AppConfig {
         return new ObjectMapper();
     }
 
-    @Bean()
+    @Bean
     @RequestScope
     public RestTemplate restTemplate(OAuth2AuthorizedClientService clientService) {
         RestTemplate restTemplate = new RestTemplate();
