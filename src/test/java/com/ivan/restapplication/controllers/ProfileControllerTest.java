@@ -1,13 +1,11 @@
 package com.ivan.restapplication.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ivan.restapplication.entity.User;
+import com.ivan.restapplication.model.entity.User;
 import com.ivan.restapplication.service.impl.SavedUserService;
-import com.ivan.restapplication.service.impl.UserService;
-import org.junit.Ignore;
+import com.ivan.restapplication.service.impl.SpotifyUserServiceImpl;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +29,7 @@ public class ProfileControllerTest {
     private SavedUserService savedUserService;
 
     @MockBean
-    private UserService userService;
+    private SpotifyUserServiceImpl spotifyUserServiceImpl;
 
     @MockBean
     private ClientRegistrationRepository clientRegistrationRepository;
@@ -43,10 +41,10 @@ public class ProfileControllerTest {
     private ModelMapper mapper;
 
     @Test
-    @Ignore
+    @Disabled
     public void testMyProfile() throws Exception {
         Mockito.when(savedUserService.save(Mockito.any(User.class))).thenReturn(new User());
-        Mockito.when(userService.showUserProfile()).thenReturn(objectMapper.readTree("{ \"id\" : \"2\"}"));
+        Mockito.when(spotifyUserServiceImpl.showUserProfile()).thenReturn(objectMapper.readTree("{ \"id\" : \"2\"}"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/profile"))
                 .andExpect(status().isOk());

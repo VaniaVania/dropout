@@ -1,6 +1,6 @@
-package com.ivan.restapplication.entity;
+package com.ivan.restapplication.model.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users_external_urls")

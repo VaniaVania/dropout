@@ -3,7 +3,7 @@ package com.ivan.restapplication.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ivan.restapplication.service.impl.UserService;
+import com.ivan.restapplication.service.impl.SpotifyUserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -13,7 +13,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.web.client.RestTemplate;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class ProfileServiceTest {
 
@@ -26,7 +27,7 @@ class ProfileServiceTest {
     @Mock
     private JsonNode jsonNode;
 
-    private UserService userService;
+    private SpotifyUserServiceImpl spotifyUserServiceImpl;
 
     @BeforeEach
     void setUp() {
@@ -52,7 +53,7 @@ class ProfileServiceTest {
         )).thenReturn(responseEntity);
         when(mapper.readTree(responseBody)).thenReturn(jsonNode);
 
-        JsonNode result = userService.showUserProfile();
+        JsonNode result = spotifyUserServiceImpl.showUserProfile();
 
         //verify(authService).useToken();
         verify(restTemplate).exchange(

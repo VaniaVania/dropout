@@ -2,36 +2,33 @@ package com.ivan.restapplication.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.ivan.restapplication.service.*;
-import com.ivan.restapplication.service.impl.AnalysisService;
-import com.ivan.restapplication.service.impl.TrackService;
-import com.ivan.restapplication.service.impl.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ivan.restapplication.service.AnalysisService;
+import com.ivan.restapplication.service.SpotifyGenresService;
+import com.ivan.restapplication.service.SpotifyTracksService;
+import com.ivan.restapplication.service.SpotifyUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
-
 @Controller
 @RequestMapping("/manage")
+@RequiredArgsConstructor
 public class ManageController {
 
     private final SpotifyTracksService trackService;
     private final SpotifyUserService userService;
     private final SpotifyGenresService genresService;
     private final AnalysisService analysisService;
-
-    @Autowired
-    public ManageController(TrackService trackService, UserService userService, SpotifyGenresService genresService, AnalysisService analysisService) {
-        this.trackService = trackService;
-        this.userService = userService;
-        this.genresService = genresService;
-        this.analysisService = analysisService;
-    }
 
     @GetMapping
     public String followedArtists() {

@@ -1,26 +1,22 @@
 package com.ivan.restapplication.exception.handler;
 
-import com.ivan.restapplication.exception.ApplicationException;
+import com.ivan.restapplication.exception.ApplicationExceptionResponse;
 import com.ivan.restapplication.exception.NotListeningUserException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
-
-@ControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+@RestControllerAdvice
+public class GlobalExceptionHandler{
 
     @ExceptionHandler(value = NotListeningUserException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ApplicationException handleNotListeningUserException(NotListeningUserException e) {
-        return ApplicationException.builder()
-                .message("Not valid data")
+    protected ApplicationExceptionResponse handleNotListeningUserException(NotListeningUserException e) {
+        return ApplicationExceptionResponse.builder()
+                .message(e.getMessage())
+                .statusCode(HttpStatus.BAD_REQUEST.value())
                 .exceptionMessage(e.getMessage())
-                .statusCode(HttpStatus.BAD_REQUEST)
-                .timestamp(LocalDateTime.now())
                 .build();
     }
 }

@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.ivan.restapplication.service.impl.AnalysisService;
-import com.ivan.restapplication.service.impl.UserService;
-import org.junit.Ignore;
+import com.ivan.restapplication.service.impl.AnalysisServiceImpl;
+import com.ivan.restapplication.service.impl.SpotifyUserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @SpringBootTest
-@Ignore
+@Disabled
 public class ManageServiceTest {
 
     private final List<String> terms = new ArrayList<>();
@@ -41,10 +41,10 @@ public class ManageServiceTest {
     private ObjectMapper mapper;
 
     @Autowired
-    private AnalysisService analysisService;
+    private AnalysisServiceImpl analysisService;
 
     @Autowired
-    private UserService userService;
+    private SpotifyUserServiceImpl spotifyUserServiceImpl;
 
     private MockRestServiceServer server;
 
@@ -71,7 +71,7 @@ public class ManageServiceTest {
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withSuccess(apiResponse2, MediaType.APPLICATION_JSON));
 
-        JsonNode actual = userService.findFollowedArtists();
+        JsonNode actual = spotifyUserServiceImpl.findFollowedArtists();
 
         server.verify();
 

@@ -1,9 +1,9 @@
 package com.ivan.restapplication.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ivan.restapplication.service.impl.AnalysisService;
-import com.ivan.restapplication.exception.NotListeningUserException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ivan.restapplication.service.AnalysisService;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,21 +14,17 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/features")
+@RequiredArgsConstructor
 public class FeatureController {
 
     private final AnalysisService analysisService;
 
-    @Autowired
-    public FeatureController(AnalysisService analysisService) {
-        this.analysisService = analysisService;
-    }
-
     @GetMapping()
-    public String features(@RequestParam(defaultValue = "short_term") String time_range, @RequestParam(defaultValue = "acousticness") String feature, Model model) throws JsonProcessingException, NotListeningUserException {
+    public String features(@RequestParam(defaultValue = "short_term", name = "time_range") String timeRange, @RequestParam(defaultValue = "acousticness") String feature, Model model) throws JsonProcessingException {
             model.addAllAttributes(Map.of(
-                    "track", analysisService.findMinMaxTrackFeatures(feature, time_range),
+                    "track", analysisService.findMinMaxTrackFeatures(feature, timeRange),
                     "feature", feature,
-                    "term", time_range)
+                    "term", timeRange)
             );
             return "features";
     }

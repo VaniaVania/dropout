@@ -3,7 +3,6 @@ package com.ivan.restapplication.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.CacheBuilder;
 import com.ivan.restapplication.exception.UnauthorizedUserException;
-import org.modelmapper.ModelMapper;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
@@ -25,11 +24,6 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class AppConfig {
-
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
 
     @Bean
     public ObjectMapper objectMapper() {

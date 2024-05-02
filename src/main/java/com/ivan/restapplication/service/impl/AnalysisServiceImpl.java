@@ -4,8 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.ivan.restapplication.entity.enums.Term;
 import com.ivan.restapplication.exception.NotListeningUserException;
+import com.ivan.restapplication.model.enums.Term;
+import com.ivan.restapplication.service.AnalysisService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,38 +23,41 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AnalysisService {
+public class AnalysisServiceImpl implements AnalysisService {
 
     private final ObjectMapper mapper;
-    private final UserService userService;
+    private final SpotifyUserServiceImpl spotifyUserServiceImpl;
     private final RestTemplate restTemplate;
 
+    @Override
     @Cacheable(cacheNames = "topArtistsCache")
     public JsonNode findTopArtistsAllTime() {
         ArrayNode node = mapper.createArrayNode();
         Arrays.stream(Term.values()).forEach(term -> {
             try {
-                node.add(userService.findTopArtists(term.getValue()));
+                node.add(spotifyUserServiceImpl.findTopArtists(term.getValue()));
             } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+                throw new NotListeningUserException();
             }
         });
         return node;
     }
 
+    @Override
     @SneakyThrows
     public List<String> findTopArtistsGenres(String term) {
         List<String> tracksIds = new ArrayList<>(); // List of tracks ids
 
-        userService.findTopArtists(term).findValue("genres").forEach(el -> tracksIds
+        spotifyUserServiceImpl.findTopArtists(term).findValue("genres").forEach(el -> tracksIds
                 .add(el.asText()));       // Adding ids to a list
         return tracksIds;
     }
 
+    @Override
     @SneakyThrows
     public String findTopTrackIds(String term) {
         List<String> trackIds = new ArrayList<>(); // List of tracks ids
-        JsonNode topTracksNode = userService.findTopTracks(term);
+        JsonNode topTracksNode = spotifyUserServiceImpl.findTopTracks(term);
 
         topTracksNode.forEach(el -> trackIds
                 .add(el.get("id").asText()));       // Adding ids to a list
@@ -63,8 +67,8 @@ public class AnalysisService {
     }
 
 
-    @SneakyThrows
-    public ArrayNode findMinMaxTrackFeatures(String feature, String term) throws NotListeningUserException {
+    @Override
+    public ArrayNode findMinMaxTrackFeatures(String feature, String term) throws JsonProcessingException {
         Map<Float, JsonNode> trackListMap = new TreeMap<>();  //Map with float value of feature, and track href
         String topIds = findTopTrackIds(term);
         ArrayNode minMaxValueNode = mapper.createArrayNode();
@@ -87,10 +91,13 @@ public class AnalysisService {
                     .readTree(restTemplate
                             .getForObject(trackListMap.get(Collections.min(trackListMap.keySet())).asText(), String.class)
                     ));  //min value
+        } else {
+            throw new NotListeningUserException();
         }
         return minMaxValueNode;
     }
 
+    @Override
     @Cacheable(cacheNames = "suggestCache", key = "#followedArtistsNode")
     public JsonNode findSuggestedArtists(JsonNode followedArtistsNode) {
         ArrayNode suggestNode = mapper.createArrayNode();

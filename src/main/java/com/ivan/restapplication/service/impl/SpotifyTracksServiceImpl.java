@@ -4,27 +4,23 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivan.restapplication.service.SpotifyTracksService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class TrackService implements SpotifyTracksService {
+@RequiredArgsConstructor
+public class SpotifyTracksServiceImpl implements SpotifyTracksService {
 
-    @Autowired
-    private ObjectMapper mapper;
-
-    @Autowired
-    private AnalysisService analysisService;
-
-    @Autowired
-    private RestTemplate restTemplate;
+    private final ObjectMapper mapper;
+    private final AnalysisServiceImpl analysisService;
+    private final RestTemplate restTemplate;
 
     @Override
-    public JsonNode getRecommendations(String seed_artists, String seed_tracks, String seed_genres) throws JsonProcessingException {
+    public JsonNode getRecommendations(String seedArtists, String seedTracks, String seedGenres) throws JsonProcessingException {
         return mapper
                 .readTree(restTemplate
-                        .getForObject("https://api.spotify.com/v1/recommendations?seed_artists=" + seed_artists + "&seed_genres=" + seed_genres + "&seed_tracks=" + seed_tracks, String.class));
+                        .getForObject("https://api.spotify.com/v1/recommendations?seed_artists=" + seedArtists + "&seed_genres=" + seedGenres + "&seed_tracks=" + seedTracks, String.class));
     }
 
     @Override

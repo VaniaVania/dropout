@@ -1,15 +1,11 @@
 package com.ivan.restapplication.exception;
 
 import com.ivan.restapplication.exception.response.ExceptionMessageConstant;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import com.ivan.restapplication.exception.status.Status400BadRequest;
 
-import java.time.LocalDateTime;
+public class NotListeningUserException extends Status400BadRequest {
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
-public class NotListeningUserException extends ApplicationException{
-
-    public NotListeningUserException(String message) {
-        super(HttpStatus.BAD_REQUEST, message, ExceptionMessageConstant.USER_NOT_LISTENING, LocalDateTime.now());
+    public NotListeningUserException() {
+        super(ExceptionMessageConstant.USER_NOT_LISTENING);
     }
 }

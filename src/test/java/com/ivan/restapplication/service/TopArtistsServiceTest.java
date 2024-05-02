@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.ivan.restapplication.service.impl.AnalysisService;
-import com.ivan.restapplication.service.impl.UserService;
+import com.ivan.restapplication.service.impl.AnalysisServiceImpl;
+import com.ivan.restapplication.service.impl.SpotifyUserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -32,10 +32,10 @@ public class TopArtistsServiceTest {
     private RestTemplate restTemplate;
 
     @Autowired
-    private UserService userService;
+    private SpotifyUserServiceImpl spotifyUserServiceImpl;
 
     @Autowired
-    private AnalysisService analysisService;
+    private AnalysisServiceImpl analysisService;
 
     @Autowired
     private ObjectMapper mapper;
@@ -62,7 +62,7 @@ public class TopArtistsServiceTest {
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(MockRestResponseCreators.withSuccess(apiResponse, MediaType.APPLICATION_JSON));
 
-        JsonNode actual = userService.findTopArtists(terms.stream().findAny().orElseThrow());
+        JsonNode actual = spotifyUserServiceImpl.findTopArtists(terms.stream().findAny().orElseThrow());
         mockServer.verify();
         assertThat(actual.toString()).isEqualTo("[\"Artist 1\",\"Artist 2\"]");
     }

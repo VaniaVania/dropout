@@ -1,4 +1,4 @@
-package com.ivan.restapplication.entity.enums;
+package com.ivan.restapplication.model.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

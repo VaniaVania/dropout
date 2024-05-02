@@ -1,6 +1,6 @@
 package com.ivan.restapplication.integration;
 
-import com.ivan.restapplication.entity.User;
+import com.ivan.restapplication.model.entity.User;
 import com.ivan.restapplication.repository.UsersRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;

@@ -1,11 +1,11 @@
 package com.ivan.restapplication.service;
 
-import com.ivan.restapplication.entity.ExplicitContent;
-import com.ivan.restapplication.entity.ExternalUrl;
-import com.ivan.restapplication.entity.Follower;
-import com.ivan.restapplication.entity.User;
+import com.ivan.restapplication.model.entity.ExplicitContent;
+import com.ivan.restapplication.model.entity.ExternalUrl;
+import com.ivan.restapplication.model.entity.Follower;
+import com.ivan.restapplication.model.entity.User;
 import com.ivan.restapplication.service.impl.SavedUserService;
-import com.ivan.restapplication.service.impl.UserService;
+import com.ivan.restapplication.service.impl.SpotifyUserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 @SpringBootTest
 @AutoConfigureWebTestClient
-public class SavedUserServiceTest {
+public class SavedSpotifyUserServiceImplTest {
 
     @Autowired
     private SavedUserService savedUserService;
@@ -38,7 +38,7 @@ public class SavedUserServiceTest {
     private MockRestServiceServer server;
 
     @Autowired
-    private UserService userService;
+    private SpotifyUserServiceImpl spotifyUserServiceImpl;
 
 
     private User user;

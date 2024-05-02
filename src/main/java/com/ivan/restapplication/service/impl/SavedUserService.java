@@ -1,8 +1,13 @@
 package com.ivan.restapplication.service.impl;
 
-import com.ivan.restapplication.entity.*;
+import com.ivan.restapplication.model.entity.ExplicitContent;
+import com.ivan.restapplication.model.entity.ExternalUrl;
+import com.ivan.restapplication.model.entity.Follower;
+import com.ivan.restapplication.model.entity.Image;
+import com.ivan.restapplication.model.entity.User;
 import com.ivan.restapplication.repository.UsersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,14 +15,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class SavedUserService {
 
-    private final UsersRepository usersRepository;
+    @Value(value = "${app.spotify.country-api-url}")
+    private String countryApiUrl;
 
-    @Autowired
-    public SavedUserService(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
-    }
+    private final UsersRepository usersRepository;
 
     @Transactional
     public User save(User user) {
@@ -35,7 +39,7 @@ public class SavedUserService {
 
         user.setCreatedAt(LocalDateTime.now());
 
-        user.setCountryImage("https://countryflagsapi.com/png/" + user.getCountry().toLowerCase());
+        user.setCountryImage(countryApiUrl.concat(user.getCountry().toLowerCase()));
 
         return usersRepository.save(user);
     }
