@@ -6,9 +6,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.web.SecurityFilterChain;
@@ -37,8 +42,10 @@ public class SecurityConfig{
                     authorize.anyRequest().authenticated();
                 })
                 .cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable).sessionManagement(withDefaults())
-                .oauth2Login(withDefaults()).logout(logout -> logout
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(withDefaults())
+                .oauth2Login(withDefaults())
+                .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .clearAuthentication(true))
@@ -47,11 +54,7 @@ public class SecurityConfig{
 
     @Bean
     public ClientRegistrationRepository clientRegistrationRepository() {
-        return new InMemoryClientRegistrationRepository(this.spotifyClientRegistration());
-    }
-
-    private ClientRegistration spotifyClientRegistration() {
-        return ClientRegistration
+        ClientRegistration spotifyClientRegistration = ClientRegistration
                 .withRegistrationId("spotify")
                 .clientId(clientId)
                 .clientSecret(clientSecret)
@@ -65,8 +68,20 @@ public class SecurityConfig{
                 .userNameAttributeName("display_name")
                 .clientName("spotify")
                 .build();
-
+        return new InMemoryClientRegistrationRepository(spotifyClientRegistration);
     }
 
-
+    @Bean
+    public OAuth2AuthorizedClientManager authorizedClientManager(ClientRegistrationRepository clientRegistrationRepository, OAuth2AuthorizedClientRepository authorizedClientRepository) {
+        OAuth2AuthorizedClientProvider authorizedClientProvider =
+                OAuth2AuthorizedClientProviderBuilder.builder()
+                        .authorizationCode()
+                        .refreshToken()
+                        .clientCredentials()
+                        .password()
+                        .build();
+        DefaultOAuth2AuthorizedClientManager authorizedClientManager = new DefaultOAuth2AuthorizedClientManager(clientRegistrationRepository, authorizedClientRepository);
+        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+        return authorizedClientManager;
+    }
 }

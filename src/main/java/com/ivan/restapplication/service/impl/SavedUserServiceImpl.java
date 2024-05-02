@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class SavedUserService {
+public class SavedUserServiceImpl {
 
     @Value(value = "${app.spotify.country-api-url}")
     private String countryApiUrl;
@@ -28,10 +28,10 @@ public class SavedUserService {
         Follower follower = user.getFollowers();
         follower.setUser(user);
 
-        ExplicitContent explicitContent = user.getExplicit_content();
+        ExplicitContent explicitContent = user.getExplicitContent();
         explicitContent.setUser(user);
         
-        ExternalUrl externalUrl = user.getExternal_urls();
+        ExternalUrl externalUrl = user.getExternalUrls();
         externalUrl.setUser(user);
 
         List<Image> images = user.getImages();

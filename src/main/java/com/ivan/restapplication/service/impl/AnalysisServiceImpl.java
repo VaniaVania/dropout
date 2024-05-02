@@ -66,7 +66,6 @@ public class AnalysisServiceImpl implements AnalysisService {
                 .collect(Collectors.joining(",", "", ""));
     }
 
-
     @Override
     public ArrayNode findMinMaxTrackFeatures(String feature, String term) throws JsonProcessingException {
         Map<Float, JsonNode> trackListMap = new TreeMap<>();  //Map with float value of feature, and track href
@@ -80,7 +79,6 @@ public class AnalysisServiceImpl implements AnalysisService {
         if (!featureNode.get("audio_features").toString().equals("[null]")) {
             featureNode.get("audio_features")
                     .forEach(f -> trackListMap.put(f.get(feature).floatValue(), f.get("track_href")));     //Forming map  --> [ 0.5 , href ]
-
 
             minMaxValueNode.add(mapper
                     .readTree(restTemplate

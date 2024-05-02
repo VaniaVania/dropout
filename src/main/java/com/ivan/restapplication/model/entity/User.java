@@ -1,6 +1,7 @@
 package com.ivan.restapplication.model.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,12 +12,13 @@ import java.util.List;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
     @Column(name = "id")
     @GeneratedValue
-    private Long db_id;
+    private Long dbId;
 
     @Column(name = "country")
     private String country;
@@ -47,11 +49,11 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @CollectionTable(name = "users_explicit_contents", joinColumns = @JoinColumn(name = "user_id"))
-    private ExplicitContent explicit_content;
+    private ExplicitContent explicitContent;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @CollectionTable(name = "users_external_urls", joinColumns = @JoinColumn(name = "user_id"))
-    private ExternalUrl external_urls;
+    private ExternalUrl externalUrls;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @CollectionTable(name = "users_followers", joinColumns = @JoinColumn(name = "user_id"))

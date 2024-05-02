@@ -27,12 +27,6 @@ public class DatabaseIntegrationTest {
     @Autowired
     UsersRepository usersRepository;
 
-    @BeforeEach
-    public void setUp(){
-        postgreSQLContainer.start();
-        user = new User(COUNTRY);
-    }
-
     @AfterEach
     public void teardown(){
         postgreSQLContainer.stop();

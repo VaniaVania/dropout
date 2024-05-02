@@ -1,10 +1,7 @@
 package com.ivan.restapplication.service;
 
-import com.ivan.restapplication.model.entity.ExplicitContent;
-import com.ivan.restapplication.model.entity.ExternalUrl;
-import com.ivan.restapplication.model.entity.Follower;
 import com.ivan.restapplication.model.entity.User;
-import com.ivan.restapplication.service.impl.SavedUserService;
+import com.ivan.restapplication.service.impl.SavedUserServiceImpl;
 import com.ivan.restapplication.service.impl.SpotifyUserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,9 +16,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
@@ -31,7 +25,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 public class SavedSpotifyUserServiceImplTest {
 
     @Autowired
-    private SavedUserService savedUserService;
+    private SavedUserServiceImpl savedUserServiceImpl;
 
     private RestTemplate restTemplate;
 
@@ -47,30 +41,17 @@ public class SavedSpotifyUserServiceImplTest {
     public void setUp() {
         this.restTemplate = new RestTemplate();
         server = MockRestServiceServer.createServer(restTemplate);
-        user = new User("country",
-                "name",
-                "mail@gmail.com",
-                "href", "id",
-                "free",
-                "type",
-                "uri",
-                "image",
-                new ExplicitContent(),
-                new ExternalUrl(),
-                new Follower(),
-                new ArrayList<>(),
-                LocalDateTime.now());
     }
 
     @Test
     public void shouldSave() {
-        savedUserService.save(user);
-        Assertions.assertTrue(savedUserService.existsById(user.getId()));
+        savedUserServiceImpl.save(user);
+        Assertions.assertTrue(savedUserServiceImpl.existsById(user.getId()));
     }
 
     @Test
     public void findUserFailTest() {
-        boolean isCreated = savedUserService.existsById(user.getId() + "fakeId");
+        boolean isCreated = savedUserServiceImpl.existsById(user.getId() + "fakeId");
         Assertions.assertFalse(isCreated);
     }
 

@@ -10,15 +10,13 @@ import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.*;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.annotation.RequestScope;
+import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,7 +29,7 @@ public class AppConfig {
     }
 
     @Bean
-    @RequestScope
+    @SessionScope
     public RestTemplate restTemplate(OAuth2AuthorizedClientService clientService) {
         RestTemplate restTemplate = new RestTemplate();
         String accessToken = getAuthenticationToken(clientService);
@@ -43,29 +41,16 @@ public class AppConfig {
         return restTemplate;
     }
 
-    @Bean
-    public OAuth2AuthorizedClientManager authorizedClientManager(ClientRegistrationRepository clientRegistrationRepository, OAuth2AuthorizedClientRepository authorizedClientRepository) {
-        OAuth2AuthorizedClientProvider authorizedClientProvider =
-                OAuth2AuthorizedClientProviderBuilder.builder()
-                        .authorizationCode()
-                        .refreshToken()
-                        .clientCredentials()
-                        .password()
-                        .build();
-        DefaultOAuth2AuthorizedClientManager authorizedClientManager = new DefaultOAuth2AuthorizedClientManager(clientRegistrationRepository, authorizedClientRepository);
-        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
-        return authorizedClientManager;
-    }
-
     @Bean("myCacheManager")
     public CacheManager cacheManager() {
         return new ConcurrentMapCacheManager(){
             @Override
-            protected Cache createConcurrentMapCache(String name) {
+            @NonNull
+            protected Cache createConcurrentMapCache(@NonNull String name) {
                 return new ConcurrentMapCache(
                         name,
                         CacheBuilder.newBuilder()
-                                .expireAfterWrite(10, TimeUnit.SECONDS)
+                                .expireAfterWrite(100, TimeUnit.SECONDS)
                                 .build().asMap(),
                         false);
             }

@@ -5,8 +5,9 @@ import com.ivan.restapplication.model.dto.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper()
 public interface UserMapper {
     UserDto entityToDto(User user);
+
     User dtoToEntity(UserDto userDto);
 }

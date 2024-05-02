@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.ivan.restapplication.mapper.UserMapper;
 import com.ivan.restapplication.exception.UnauthorizedUserException;
 import com.ivan.restapplication.service.SpotifyUserService;
-import com.ivan.restapplication.service.impl.SavedUserService;
+import com.ivan.restapplication.service.impl.SavedUserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,12 +21,12 @@ import java.util.Map;
 public class ProfileController {
 
     private final SpotifyUserService userService;
-    private final SavedUserService savedUserService;
+    private final SavedUserServiceImpl savedUserServiceImpl;
     private final UserMapper mapper;
 
     @GetMapping()
     public String myProfile(@RequestParam(defaultValue = "short_term", name = "time_range") String timeRange, Model model) throws JsonProcessingException, UnauthorizedUserException {
-        savedUserService.save(mapper
+        savedUserServiceImpl.save(mapper
                 .dtoToEntity(userService
                         .getSpotifyUserDTO()));
         JsonNode userProfile = userService.showUserProfile();

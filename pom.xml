@@ -128,13 +128,40 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
+                    <source>17</source> <!-- depending on your project -->
+                    <target>17</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
                             <version>1.6.0.Beta1</version>
                         </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.20</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>0.2.0</version>
+                        </path>
                     </annotationProcessorPaths>
+                <showWarnings>true</showWarnings>
+                <compilerArgs>
+                    <arg>
+                        -Amapstruct.suppressGeneratorTimestamp=true
+                    </arg>
+                    <arg>
+                        -Amapstruct.suppressGeneratorVersionInfoComment=true
+                    </arg>
+                    <arg>
+                        -Amapstruct.verbose=true
+                    </arg>
+                    <arg>
+                        -Amapstruct.defaultComponentModel=spring
+                    </arg>
+                </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>

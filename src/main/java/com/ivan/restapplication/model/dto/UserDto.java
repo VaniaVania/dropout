@@ -1,5 +1,6 @@
 package com.ivan.restapplication.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ivan.restapplication.model.entity.ExplicitContent;
 import com.ivan.restapplication.model.entity.ExternalUrl;
 import com.ivan.restapplication.model.entity.Follower;
@@ -14,6 +15,8 @@ import java.util.List;
 public class UserDto {
 
     private String country;
+
+    @JsonProperty("display_name")
     private String displayName;
     private String email;
     private String href;
@@ -21,7 +24,9 @@ public class UserDto {
     private String product;
     private String type;
     private String uri;
+    @JsonProperty("explicit_content")
     private ExplicitContent explicitContent;
+    @JsonProperty("external_urls")
     private ExternalUrl externalUrls;
     private Follower followers;
     private List<Image> images;

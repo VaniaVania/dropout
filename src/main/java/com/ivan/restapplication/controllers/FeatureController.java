@@ -1,8 +1,8 @@
 package com.ivan.restapplication.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ivan.restapplication.service.AnalysisService;
 
+import com.ivan.restapplication.service.AnalysisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
