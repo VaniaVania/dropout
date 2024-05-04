@@ -3,6 +3,7 @@ package com.ivan.restapplication.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.CacheBuilder;
 import com.ivan.restapplication.exception.UnauthorizedUserException;
+import com.ivan.restapplication.util.TokenHandler;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
@@ -11,10 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.*;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -32,7 +30,7 @@ public class AppConfig {
     @SessionScope
     public RestTemplate restTemplate(OAuth2AuthorizedClientService clientService) {
         RestTemplate restTemplate = new RestTemplate();
-        String accessToken = getAuthenticationToken(clientService);
+        String accessToken = TokenHandler.getAuthenticationToken(clientService);
         if (accessToken != null) {
             restTemplate.getInterceptors().add(getBearerTokenInterceptor(accessToken));
         } else {
@@ -57,22 +55,6 @@ public class AppConfig {
         };
     }
 
-    public String getAuthenticationToken(OAuth2AuthorizedClientService clientService){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getClass().isAssignableFrom(OAuth2AuthenticationToken.class)) {
-            OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
-            if (oauthToken.getAuthorizedClientRegistrationId().equals("spotify")) {
-                OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(oauthToken.getAuthorizedClientRegistrationId(), oauthToken.getName());
-                if (client == null) {
-                    clientService.removeAuthorizedClient(oauthToken.getAuthorizedClientRegistrationId(), oauthToken.getName());
-                } else {
-                    return client.getAccessToken().getTokenValue();
-                }
-            }
-        }
-        return null;
-    }
-
     public ClientHttpRequestInterceptor getBearerTokenInterceptor(String accessToken) {
         return (request, body, execution) -> {
             request.getHeaders().add("Authorization", "Bearer " + accessToken);
@@ -85,5 +67,4 @@ public class AppConfig {
             throw new UnauthorizedUserException();
         };
     }
-
 }

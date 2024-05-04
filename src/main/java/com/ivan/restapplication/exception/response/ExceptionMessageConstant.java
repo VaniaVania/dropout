@@ -6,6 +6,6 @@ import lombok.experimental.UtilityClass;
 public class ExceptionMessageConstant {
 
     public static final String USER_NOT_LISTENING = "User not listening music";
-    public static final String USER_NOT_AUTHORIZED = "User not listening authorized";
+    public static final String USER_NOT_AUTHORIZED = "User not authorized";
 
 }
