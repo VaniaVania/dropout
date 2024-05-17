@@ -31,7 +31,7 @@ public class GlobalExceptionHandler{
                 .message(e.getMessage())
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .exceptionMessage(e.getMessage())
-                .timestamp(LocalDateTime.now())
+                //.timestamp(LocalDateTime.now()) //TODO, @ResponseBody can`t parse this calue
                 .build();
     }
 }

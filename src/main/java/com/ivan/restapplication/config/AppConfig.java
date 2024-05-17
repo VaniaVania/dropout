@@ -62,7 +62,7 @@ public class AppConfig {
         };
     }
 
-    public ClientHttpRequestInterceptor getNoTokenInterceptor() {
+    public ClientHttpRequestInterceptor getNoTokenInterceptor(){
         return (request, body, execution) -> {
             throw new UnauthorizedUserException();
         };
