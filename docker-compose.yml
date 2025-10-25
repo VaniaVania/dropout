@@ -12,6 +12,9 @@ services:
       - db
     env_file:
       - .env
+    environment:
+      - TZ=Europe/Kyiv
+      - PGTZ=Europe/Kyiv
   db:
     image: postgres:latest
     ports:
@@ -19,3 +22,6 @@ services:
     container_name: postgres
     env_file:
       - .env
+    environment:
+      - TZ=Europe/Kyiv
+      - PGTZ=Europe/Kyiv

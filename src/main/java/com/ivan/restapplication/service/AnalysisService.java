@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface AnalysisService {
     JsonNode findTopArtistsAllTime();
+    @Deprecated(since = "1.0.0", forRemoval = false)
     List<String> findTopArtistsGenres(String term);
     String findTopTrackIds(String term);
     ArrayNode findMinMaxTrackFeatures(String feature, String term) throws JsonProcessingException;

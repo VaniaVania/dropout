@@ -73,8 +73,7 @@ public class ManageController {
         model.addAllAttributes(Map.of(
                 "followedArtists", followedArtistsNode,
                 "suggestArtists", analysisService.findSuggestedArtists(followedArtistsNode),
-                "topTracks", userService.findTopTracks("short_term"),
-                "availableGenres", genresService.getAvailableGenresSeeds()
+                "topTracks", userService.findTopTracks("short_term")
         ));
     }
 
