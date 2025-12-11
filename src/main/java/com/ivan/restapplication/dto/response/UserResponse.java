@@ -1,4 +1,4 @@
-package com.ivan.restapplication.model.dto;
+package com.ivan.restapplication.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ivan.restapplication.model.entity.ExplicitContent;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class UserDto {
+public class UserResponse {
 
     private String country;
 

@@ -2,7 +2,7 @@ package com.ivan.restapplication.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.ivan.restapplication.model.dto.UserDto;
+import com.ivan.restapplication.dto.response.UserResponse;
 
 public interface SpotifyUserService {
     JsonNode showUserProfile() throws JsonProcessingException;
@@ -11,6 +11,6 @@ public interface SpotifyUserService {
     JsonNode findFollowedArtists() throws JsonProcessingException;
     void unfollowArtists(String ids);
     void followArtists(String ids);
-    UserDto getSpotifyUserDTO();
+    UserResponse getSpotifyUserDTO();
     JsonNode createPlaylist(String name) throws JsonProcessingException;
 }

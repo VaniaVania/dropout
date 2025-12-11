@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.ivan.restapplication.model.dto.UserDto;
+import com.ivan.restapplication.dto.response.UserResponse;
 import com.ivan.restapplication.service.SpotifyUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -33,8 +33,8 @@ public class SpotifyUserServiceImpl implements SpotifyUserService {
     }
 
     @Override
-    public UserDto getSpotifyUserDTO() {
-        return restTemplate.getForObject("https://api.spotify.com/v1/me", UserDto.class);
+    public UserResponse getSpotifyUserDTO() {
+        return restTemplate.getForObject("https://api.spotify.com/v1/me", UserResponse.class);
     }
 
     @Override

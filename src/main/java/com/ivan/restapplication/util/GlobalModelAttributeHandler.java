@@ -25,7 +25,7 @@ public class GlobalModelAttributeHandler {
 
         if (isAuthenticated && TokenHandler.getAuthenticationToken(authorizedClientService) != null) {
             if (!service.showUserProfile().findValues("url").isEmpty()) {
-                model.addAttribute("profileImage", service.showUserProfile().findValues("url").get(1).asText());
+                model.addAttribute("profileImage", service.showUserProfile().findValues("url").get(0).asText());
             }
         } else {
             model.addAttribute("profileImage", "/images/user.png");
